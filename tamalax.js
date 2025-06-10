@@ -18,31 +18,94 @@ Ecwid.OnAPILoaded.add(function () {
       // --- Create Your Custom Field ---
       // This is just standard JavaScript DOM manipulation.
       // You can create any HTML elements you want.
+      function createFormField(
+        container,
+        labelText,
+        inputType,
+        inputId,
+        options = []
+      ) {
+        const fieldDiv = document.createElement("div");
+        fieldDiv.className = "form-field";
+
+        const label = document.createElement("label");
+        label.innerText = labelText;
+        label.htmlFor = inputId;
+
+        let input;
+        if (inputType === "select") {
+          input = document.createElement("select");
+          input.id = inputId;
+          options.forEach((optionText) => {
+            const option = document.createElement("option");
+            option.value = optionText.toLowerCase().replace(/ /g, "-");
+            option.innerText = optionText;
+            input.appendChild(option);
+          });
+        } else {
+          input = document.createElement("input");
+          input.type = inputType;
+          input.id = inputId;
+          input.placeholder = "Enter value...";
+        }
+
+        fieldDiv.appendChild(label);
+        fieldDiv.appendChild(input);
+        container.appendChild(fieldDiv);
+      }
+
       const customContainer = document.createElement("div");
       customContainer.className = "my-custom-field-container";
 
-      const customLabel = document.createElement("label");
-      customLabel.innerText = "Enter Your Custom Engraving Text:";
-      customLabel.htmlFor = "my-custom-engraving-input";
-
-      const customInput = document.createElement("input");
-      customInput.type = "text";
-      customInput.id = "my-custom-engraving-input";
-      customInput.placeholder = "Max 20 characters";
-
-      customContainer.appendChild(customLabel);
-      customContainer.appendChild(customInput);
+      createFormField(
+        customContainer,
+        "Select Mesh:",
+        "text",
+        "custom-mesh-input"
+      );
+      createFormField(
+        customContainer,
+        "Select Sidewall Color:",
+        "text",
+        "custom-sidewall-input"
+      );
+      createFormField(
+        customContainer,
+        "Select Shooter Color:",
+        "text",
+        "custom-shooters-input"
+      );
+      const shooterOptions = [
+        "-- Please choose an option --",
+        "2 Straights",
+        "1 Straight, 1 U",
+        "2 U's",
+        "Triangle",
+      ];
+      createFormField(
+        customContainer,
+        "Select Shooter Setup:",
+        "select",
+        "custom-shooter-setup-select",
+        shooterOptions
+      );
+      createFormField(
+        customContainer,
+        "Select Pocket Placement:",
+        "text",
+        "custom-pocket-placement-input"
+      );
 
       // Find a place on the page to inject your new custom field
       // For example, right before the "Add to Bag" button.
-      const addToBagButton = document.querySelector(
-        ".details-product-purchase__add-to-bag"
+      const productDetailsActionPanel = document.querySelector(
+        ".product-details__action-panel"
       );
-      if (addToBagButton) {
+      if (productDetailsActionPanel) {
         // The exact selector may vary, use your browser's developer tools to find the right one.
-        addToBagButton.parentElement.insertBefore(
+        productDetailsActionPanel.parentElement.insertBefore(
           customContainer,
-          addToBagButton
+          productDetailsActionPanel
         );
       }
 
