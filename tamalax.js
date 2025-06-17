@@ -166,25 +166,6 @@ Ecwid.OnAPILoaded.add(function () {
       customContainer.classList.add("form-hidden");
       customContainer.classList.remove("my-custom-field-container");
 
-      // --- Inject the form and set up event listeners ---
-      const addToBagWrapper = document.querySelector(
-        ".details-product-purchase__add-to-bag-wrapper"
-      );
-      if (addToBagWrapper) {
-        addToBagWrapper.parentElement.insertBefore(
-          buttonContainer,
-          addToBagWrapper
-        );
-        addToBagWrapper.parentElement.insertBefore(
-          customContainer,
-          addToBagWrapper
-        );
-      } else {
-        console.error(
-          "Could not find the target element to inject the form fields."
-        );
-      }
-
       // Get buttons
       const unstrungBtn = document.getElementById("unstrung-btn");
       const customBtn = document.getElementById("custom-btn");
