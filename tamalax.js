@@ -42,6 +42,7 @@ Ecwid.OnAPILoaded.add(function () {
             option.innerText = optionText;
             input.appendChild(option);
           });
+          input.firstChild.setAttribute("disabled", true);
         } else {
           input = document.createElement("input");
           input.type = inputType;
@@ -54,29 +55,92 @@ Ecwid.OnAPILoaded.add(function () {
         container.appendChild(fieldDiv);
       }
 
+      // --- Function to create and inject the option buttons ---
+      function createOptionButtons(container) {
+        const optionsContainer = document.createElement("div");
+        optionsContainer.className = "stringing-options";
+
+        // Create "Unstrung" button
+        const unstrungBtn = document.createElement("button");
+        unstrungBtn.className = "option-button active"; // Active by default
+        unstrungBtn.id = "unstrung-btn";
+        unstrungBtn.textContent = "Unstrung";
+
+        // Create "Custom Stringing" button
+        const customBtn = document.createElement("button");
+        customBtn.className = "option-button";
+        customBtn.id = "custom-btn";
+        customBtn.textContent = "Custom Stringing (+$30.00)";
+
+        optionsContainer.appendChild(unstrungBtn);
+        optionsContainer.appendChild(customBtn);
+        container.appendChild(optionsContainer);
+      }
+
+      // --- Create the custom form container and its fields ---
+
+      const buttonContainer = document.createElement("div");
+      buttonContainer.className = "my-custom-button-container";
       const customContainer = document.createElement("div");
       customContainer.className = "my-custom-field-container";
 
+      createOptionButtons(buttonContainer);
+      const meshOptions = [
+        "Select Mesh",
+        "StringKing White 5x",
+        "StringKing White 5s",
+        "StringKing Black 5x",
+        "StringKing Black 5s",
+        "ECD HERO 4.0 White",
+        "ECD HERO 4.0 Black",
+      ];
       createFormField(
         customContainer,
         "Select Mesh:",
-        "text",
-        "custom-mesh-input"
+        "select",
+        "custom-mesh-input",
+        meshOptions
       );
+      const sidewallColorOptions = [
+        "Select Sidewall Color",
+        "White",
+        "Black",
+        "Red",
+        "Blue",
+        "Green",
+        "Yellow",
+        "Orange",
+        "Purple",
+        "Pink",
+      ];
       createFormField(
         customContainer,
         "Select Sidewall Color:",
-        "text",
-        "custom-sidewall-input"
+        "select",
+        "custom-sidewall-input",
+        sidewallColorOptions
       );
+      const shooterColorOptions = [
+        "Select Shooter Color",
+        "White",
+        "Black",
+        "Red",
+        "Blue",
+        "Green",
+        "Yellow",
+        "Orange",
+        "Purple",
+        "Pink",
+      ];
       createFormField(
         customContainer,
         "Select Shooter Color:",
-        "text",
-        "custom-shooters-input"
+        "select",
+        "custom-shooters-input",
+        shooterColorOptions
       );
       const shooterOptions = [
-        "-- Please choose an option --",
+        "Select Shooter Setup",
         "2 Straights",
         "1 Straight, 1 U",
         "2 U's",
@@ -89,12 +153,57 @@ Ecwid.OnAPILoaded.add(function () {
         "custom-shooter-setup-select",
         shooterOptions
       );
+      const pocketOptions = ["Select Pocket Placement", "High", "Mid", "Low"];
       createFormField(
         customContainer,
         "Select Pocket Placement:",
-        "text",
-        "custom-pocket-placement-input"
+        "select",
+        "custom-pocket-placement-input",
+        pocketOptions
       );
+
+      // Hide the form by default
+      customContainer.classList.add("form-hidden");
+      customContainer.classList.remove("my-custom-field-container");
+
+      // --- Inject the form and set up event listeners ---
+      const addToBagWrapper = document.querySelector(
+        ".details-product-purchase__add-to-bag-wrapper"
+      );
+      if (addToBagWrapper) {
+        addToBagWrapper.parentElement.insertBefore(
+          buttonContainer,
+          addToBagWrapper
+        );
+        addToBagWrapper.parentElement.insertBefore(
+          customContainer,
+          addToBagWrapper
+        );
+      } else {
+        console.error(
+          "Could not find the target element to inject the form fields."
+        );
+      }
+
+      // Get buttons
+      const unstrungBtn = document.getElementById("unstrung-btn");
+      const customBtn = document.getElementById("custom-btn");
+
+      // Event listener for the "Unstrung" button
+      unstrungBtn.addEventListener("click", () => {
+        unstrungBtn.classList.add("active");
+        customBtn.classList.remove("active");
+        customContainer.classList.remove("my-custom-field-container");
+        customContainer.classList.add("form-hidden");
+      });
+
+      // Event listener for the "Custom Stringing" button
+      customBtn.addEventListener("click", () => {
+        customBtn.classList.add("active");
+        unstrungBtn.classList.remove("active");
+        customContainer.classList.add("my-custom-field-container");
+        customContainer.classList.remove("form-hidden");
+      });
 
       // Find a place on the page to inject your new custom field
       // For example, right before the "Add to Bag" button.
