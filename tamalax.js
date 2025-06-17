@@ -70,7 +70,7 @@ Ecwid.OnAPILoaded.add(function () {
         const customBtn = document.createElement("button");
         customBtn.className = "option-button";
         customBtn.id = "custom-btn";
-        customBtn.textContent = "Custom Stringing (+$30.00)";
+        customBtn.textContent = "Custom Stringing (+$20.00)";
 
         optionsContainer.appendChild(unstrungBtn);
         optionsContainer.appendChild(customBtn);
@@ -195,6 +195,9 @@ Ecwid.OnAPILoaded.add(function () {
         // The exact selector may vary, use your browser's developer tools to find the right one.
         productDetailsActionPanel.parentElement.insertBefore(
           buttonContainer,
+          productDetailsActionPanel
+        );
+        productDetailsActionPanel.parentElement.insertBefore(
           customContainer,
           productDetailsActionPanel
         );
