@@ -166,6 +166,27 @@ Ecwid.OnAPILoaded.add(function () {
       customContainer.classList.add("form-hidden");
       customContainer.classList.remove("my-custom-field-container");
 
+      // Find a place on the page to inject your new custom field
+      // For example, right before the "Add to Bag" button.
+      const productDetailsActionPanel = document.querySelector(
+        ".product-details__action-panel"
+      );
+      if (productDetailsActionPanel) {
+        // The exact selector may vary, use your browser's developer tools to find the right one.
+        productDetailsActionPanel.parentElement.insertBefore(
+          buttonContainer,
+          productDetailsActionPanel
+        );
+        productDetailsActionPanel.parentElement.insertBefore(
+          customContainer,
+          productDetailsActionPanel
+        );
+      } else {
+        console.error(
+          "Could not find the target element to inject the form fields."
+        );
+      }
+
       // Get buttons
       const unstrungBtn = document.getElementById("unstrung-btn");
       const customBtn = document.getElementById("custom-btn");
@@ -185,23 +206,6 @@ Ecwid.OnAPILoaded.add(function () {
         customContainer.classList.add("my-custom-field-container");
         customContainer.classList.remove("form-hidden");
       });
-
-      // Find a place on the page to inject your new custom field
-      // For example, right before the "Add to Bag" button.
-      const productDetailsActionPanel = document.querySelector(
-        ".product-details__action-panel"
-      );
-      if (productDetailsActionPanel) {
-        // The exact selector may vary, use your browser's developer tools to find the right one.
-        productDetailsActionPanel.parentElement.insertBefore(
-          buttonContainer,
-          productDetailsActionPanel
-        );
-        productDetailsActionPanel.parentElement.insertBefore(
-          customContainer,
-          productDetailsActionPanel
-        );
-      }
 
       // --- Find the REAL Ecwid Option and Sync It ---
       // This is the most important part.
