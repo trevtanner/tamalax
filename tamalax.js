@@ -213,6 +213,7 @@ Ecwid.OnAPILoaded.add(function () {
       if (productDetailsActionPanel) {
         // The exact selector may vary, use your browser's developer tools to find the right one.
         productDetailsActionPanel.parentElement.insertBefore(
+          buttonContainer,
           customContainer,
           productDetailsActionPanel
         );
