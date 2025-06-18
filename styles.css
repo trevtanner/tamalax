@@ -15,7 +15,7 @@
 
 .option-button {
   flex: 1;
-  padding: 15px;
+  padding: 10px !important;
   border: none;
   background-color: #f8f9fa;
   cursor: pointer;
