@@ -3,12 +3,13 @@ Ecwid.OnAPILoaded.add(function () {
   console.log("Ecwid store ID: " + Ecwid.getOwnerId());
 
   Ecwid.OnPageLoaded.add(function (page) {
+    const unstrungCategory = 175358054;
     console.log("Page DOM is loaded");
     console.log("Page type is: " + page.type);
     console.log("Page category is: " + page.categoryId);
     console.log("Page Main category is: " + page.mainCategoryId);
     console.log("Page is: " + page);
-    if (page.type == "PRODUCT") {
+    if (page.type == "PRODUCT" && page.category == unstrungCategory) {
       console.log(
         `
        Page loaded!
