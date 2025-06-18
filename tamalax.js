@@ -3,13 +3,14 @@ Ecwid.OnAPILoaded.add(function () {
   console.log("Ecwid store ID: " + Ecwid.getOwnerId());
 
   Ecwid.OnPageLoaded.add(function (page) {
-    const unstrungCategory = 175358054;
+    const unstrungCategoryId = 175358054;
+
     console.log("Page DOM is loaded");
     console.log("Page type is: " + page.type);
     console.log("Page category is: " + page.categoryId);
     console.log("Page Main category is: " + page.mainCategoryId);
     console.log("Page is: " + page);
-    if (page.type == "PRODUCT" && page.category == unstrungCategory) {
+    if (page.type == "PRODUCT" && page.category == unstrungCategoryId) {
       console.log(
         `
        Page loaded!
@@ -18,8 +19,9 @@ Ecwid.OnAPILoaded.add(function () {
        Trying to add new field to product page...
         `
       );
-
+      const stringingServiceId = 714272866;
       const customStringing = {
+        stringing: 0,
         mesh: "",
         meshProductId: null,
         sidewallColor: "",
@@ -272,6 +274,7 @@ Ecwid.OnAPILoaded.add(function () {
         customBtn.classList.remove("active");
         customContainer.classList.remove("my-custom-field-container");
         customContainer.classList.add("form-hidden");
+        customStringing.stringing = 0;
       });
 
       // Event listener for the "Custom Stringing" button
@@ -280,6 +283,7 @@ Ecwid.OnAPILoaded.add(function () {
         unstrungBtn.classList.remove("active");
         customContainer.classList.add("my-custom-field-container");
         customContainer.classList.remove("form-hidden");
+        customStringing.stringing = 1;
       });
 
       //for hover tooltips
@@ -310,32 +314,56 @@ Ecwid.OnAPILoaded.add(function () {
         });
       });
 
-      // --- Find the REAL Ecwid Option and Sync It ---
-      // This is the most important part.
-      // Find the real Ecwid text input you created with the backend script.
-      // Its container might have a class like '.product-details__product-options'.
-      // You'll need to inspect your page to find the exact selector for the input field
-      // belonging to the "Custom Data" option.
-      // Let's assume it's an input inside a div that contains the label "Custom Data".
-      const realEcwidOptionInput = document.querySelector(
-        'input[name="option_Custom Data"]'
-      ); // This selector is an example!
+      //Set stringing items to cart and add comments(Stringing Selections)
+      const addToBagButton = document.querySelector(".form-control__button");
+      addToBagButton.addEventListener("click", () => {
+        if (customStringing.stringing == 1) {
+          var meshProduct = {
+            id: customStringing.meshProductId,
+            quantity: 1,
+            callback: function (success, product, cart) {
+              if (success) {
+                console.log("Success");
+              } else {
+                console.log("Fail");
+              }
+            },
+          };
+          var stringingServiceProduct = {
+            id: stringingServiceId,
+            quantity: 1,
+            callback: function (success, product, cart) {
+              if (success) {
+                console.log("Success");
+              } else {
+                console.log("Fail");
+              }
+            },
+          };
 
-      if (realEcwidOptionInput) {
-        // Optional: Hide the original, unstyled Ecwid option field
-        // realEcwidOptionInput.closest('.product-details-option').style.display = 'none';
+          Ecwid.Cart.addProduct(meshProduct);
+          Ecwid.Cart.addProduct(stringingServiceProduct);
 
-        // Add an event listener to your custom input
-        customInput.addEventListener("input", function (e) {
-          // When the user types in YOUR field, update the REAL Ecwid field's value.
-          realEcwidOptionInput.value = e.target.value;
-
-          // You must also trigger a 'change' event on the real input so Ecwid's internal
-          // scripts recognize the update.
-          const changeEvent = new Event("change", { bubbles: true });
-          realEcwidOptionInput.dispatchEvent(changeEvent);
-        });
-      }
+          Ecwid.Cart.setOrderComments(
+            "Mesh: " +
+              customStringing.mesh +
+              "\nSidewall Color: " +
+              customStringing.sidewallColor +
+              "\nShooter Color: " +
+              customStringing.shooterColor +
+              "\nShooter Setup: " +
+              customStringing.shooterSetup +
+              "\nPocket Placement: " +
+              customStringing.pocketPlacement,
+            function (successCallback) {
+              console.log("Success");
+            },
+            function (errorCallback) {
+              console.log("Fail");
+            }
+          );
+        }
+      });
     }
   });
 });
