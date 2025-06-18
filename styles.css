@@ -39,8 +39,6 @@
   background-color: #e9ecef;
 }
 
-
-
 /* Container for all the dynamically added fields */
 .my-custom-field-container {
   display: flex;
@@ -97,4 +95,21 @@ select:focus {
 .details-product-purchase__add-to-bag:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+}
+
+.tooltip {
+  visibility: hidden;
+  opacity: 0;
+  position: absolute;
+  background-color: #333;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 4px;
+  transition: opacity 0.3s ease;
+  z-index: 9999; /* Ensure it's above other elements */
+}
+
+.tooltip.active {
+  visibility: visible;
+  opacity: 1;
 }

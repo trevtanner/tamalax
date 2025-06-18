@@ -71,7 +71,8 @@ Ecwid.OnAPILoaded.add(function () {
         const customBtn = document.createElement("button");
         customBtn.className = "option-button";
         customBtn.id = "custom-btn";
-        customBtn.textContent = "Custom Stringing (+$20.00)";
+        customBtn.textContent = "Custom Stringing";
+        customBtn.dataset.tooltip = "+$20.00";
 
         optionsContainer.appendChild(unstrungBtn);
         optionsContainer.appendChild(customBtn);
@@ -97,7 +98,7 @@ Ecwid.OnAPILoaded.add(function () {
       ];
       createFormField(
         customContainer,
-        "Select Mesh:",
+        "Mesh:",
         "select",
         "custom-mesh-input",
         meshOptions
@@ -116,7 +117,7 @@ Ecwid.OnAPILoaded.add(function () {
       ];
       createFormField(
         customContainer,
-        "Select Sidewall Color:",
+        "Sidewall Color:",
         "select",
         "custom-sidewall-input",
         sidewallColorOptions
@@ -135,7 +136,7 @@ Ecwid.OnAPILoaded.add(function () {
       ];
       createFormField(
         customContainer,
-        "Select Shooter Color:",
+        "Shooter Color:",
         "select",
         "custom-shooters-input",
         shooterColorOptions
@@ -149,7 +150,7 @@ Ecwid.OnAPILoaded.add(function () {
       ];
       createFormField(
         customContainer,
-        "Select Shooter Setup:",
+        "Shooter Setup:",
         "select",
         "custom-shooter-setup-select",
         shooterOptions
@@ -157,7 +158,7 @@ Ecwid.OnAPILoaded.add(function () {
       const pocketOptions = ["Select Pocket Placement", "High", "Mid", "Low"];
       createFormField(
         customContainer,
-        "Select Pocket Placement:",
+        "Pocket Placement:",
         "select",
         "custom-pocket-placement-input",
         pocketOptions
@@ -206,6 +207,34 @@ Ecwid.OnAPILoaded.add(function () {
         unstrungBtn.classList.remove("active");
         customContainer.classList.add("my-custom-field-container");
         customContainer.classList.remove("form-hidden");
+      });
+
+      //for hover tooltips
+      const triggers = document.querySelectorAll("[data-tooltip]");
+
+      triggers.forEach((trigger) => {
+        const tooltip = document.createElement("div");
+        tooltip.classList.add("tooltip");
+        tooltip.textContent = trigger.dataset.tooltip;
+        document.body.appendChild(tooltip); // Or append to the trigger itself
+
+        trigger.addEventListener("mouseenter", () => {
+          const rect = trigger.getBoundingClientRect();
+          tooltip.style.left = `${
+            rect.left +
+            window.scrollX +
+            rect.width / 2 -
+            tooltip.offsetWidth / 2
+          }px`;
+          tooltip.style.top = `${
+            rect.top + window.scrollY + rect.height + 5
+          }px`; // 5px offset below trigger
+          tooltip.classList.add("active");
+        });
+
+        trigger.addEventListener("mouseleave", () => {
+          tooltip.classList.remove("active");
+        });
       });
 
       // --- Find the REAL Ecwid Option and Sync It ---
