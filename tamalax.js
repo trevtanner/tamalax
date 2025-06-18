@@ -19,6 +19,15 @@ Ecwid.OnAPILoaded.add(function () {
         `
       );
 
+      const customStringing = {
+        mesh: "",
+        meshProductId: null,
+        sidewallColor: "",
+        shooterColor: "",
+        shooterSetup: "",
+        pocketPlacement: "",
+      };
+
       // --- Create Your Custom Field ---
       // This is just standard JavaScript DOM manipulation.
       // You can create any HTML elements you want.
@@ -27,7 +36,8 @@ Ecwid.OnAPILoaded.add(function () {
         labelText,
         inputType,
         inputId,
-        options = []
+        options = [],
+        stringingKey
       ) {
         const fieldDiv = document.createElement("div");
         fieldDiv.className = "form-field";
@@ -40,12 +50,22 @@ Ecwid.OnAPILoaded.add(function () {
         if (inputType === "select") {
           input = document.createElement("select");
           input.id = inputId;
-          options.forEach((optionText) => {
+
+          if (stringingKey) {
+            input.dataset.key = stringingKey;
+          }
+
+          options.forEach((optionData) => {
+            // Looping through objects now
             const option = document.createElement("option");
-            option.value = optionText.toLowerCase().replace(/ /g, "-");
-            option.innerText = optionText;
+            // Set the option's value to the ID from our object
+            option.value = optionData.text;
+            option.id = optionData.id;
+            // Set the displayed text to the Text from our object
+            option.innerText = optionData.text;
             input.appendChild(option);
           });
+
           input.firstChild.setAttribute("disabled", true);
         } else {
           input = document.createElement("input");
@@ -82,6 +102,49 @@ Ecwid.OnAPILoaded.add(function () {
         container.appendChild(optionsContainer);
       }
 
+      // --- Function to update variables on form changes ---
+      function setupFormListeners() {
+        // Get references to each select element
+        const meshSelect = document.getElementById("custom-mesh-input");
+        const sidewallSelect = document.getElementById("custom-sidewall-input");
+        const shooterColorSelect = document.getElementById(
+          "custom-shooters-input"
+        );
+        const shooterSetupSelect = document.getElementById(
+          "custom-shooter-setup-select"
+        );
+        const pocketPlacementSelect = document.getElementById(
+          "custom-pocket-placement-input"
+        );
+
+        // Add a 'change' event listener to each select element
+        meshSelect.addEventListener("change", (event) => {
+          customStringing.mesh = event.target.value;
+          customStringing.meshProductId = event.target.selectedOptions[0].id;
+          console.log(customStringing); // For testing
+        });
+
+        sidewallSelect.addEventListener("change", (event) => {
+          customStringing.sidewallColor = event.target.value;
+          console.log(customStringing); // For testing
+        });
+
+        shooterColorSelect.addEventListener("change", (event) => {
+          customStringing.shooterColor = event.target.value;
+          console.log(customStringing); // For testing
+        });
+
+        shooterSetupSelect.addEventListener("change", (event) => {
+          customStringing.shooterSetup = event.target.value;
+          console.log(customStringing); // For testing
+        });
+
+        pocketPlacementSelect.addEventListener("change", (event) => {
+          customStringing.pocketPlacement = event.target.value;
+          console.log(customStringing); // For testing
+        });
+      }
+
       // --- Create the custom form container and its fields ---
 
       const buttonContainer = document.createElement("div");
@@ -91,13 +154,13 @@ Ecwid.OnAPILoaded.add(function () {
 
       createOptionButtons(buttonContainer);
       const meshOptions = [
-        "Select Mesh",
-        "StringKing White 5x",
-        "StringKing White 5s",
-        "StringKing Black 5x",
-        "StringKing Black 5s",
-        "ECD HERO 4.0 White",
-        "ECD HERO 4.0 Black",
+        { text: "Select Mesh", id: "" },
+        { text: "StringKing White 5x", id: 713353000 },
+        { text: "StringKing White 5s", id: 760238689 },
+        { text: "StringKing Black 5x", id: 1 },
+        { text: "StringKing Black 5s", id: 2 },
+        { text: "ECD HERO 4.0 White", id: 3 },
+        { text: "ECD HERO 4.0 Black", id: 4 },
       ];
       createFormField(
         customContainer,
@@ -107,16 +170,16 @@ Ecwid.OnAPILoaded.add(function () {
         meshOptions
       );
       const sidewallColorOptions = [
-        "Select Sidewall Color",
-        "White",
-        "Black",
-        "Red",
-        "Blue",
-        "Green",
-        "Yellow",
-        "Orange",
-        "Purple",
-        "Pink",
+        { id: "", text: "Select Sidewall Color" },
+        { id: "wht", text: "White" },
+        { id: "blk", text: "Black" },
+        { id: "red", text: "Red" },
+        { id: "blu", text: "Blue" },
+        { id: "grn", text: "Green" },
+        { id: "yel", text: "Yellow" },
+        { id: "org", text: "Orange" },
+        { id: "pur", text: "Purple" },
+        { id: "pin", text: "Pink" },
       ];
       createFormField(
         customContainer,
@@ -126,16 +189,16 @@ Ecwid.OnAPILoaded.add(function () {
         sidewallColorOptions
       );
       const shooterColorOptions = [
-        "Select Shooter Color",
-        "White",
-        "Black",
-        "Red",
-        "Blue",
-        "Green",
-        "Yellow",
-        "Orange",
-        "Purple",
-        "Pink",
+        { id: "", text: "Select Shooter Color" },
+        { id: "wht", text: "White" },
+        { id: "blk", text: "Black" },
+        { id: "red", text: "Red" },
+        { id: "blu", text: "Blue" },
+        { id: "grn", text: "Green" },
+        { id: "yel", text: "Yellow" },
+        { id: "org", text: "Orange" },
+        { id: "pur", text: "Purple" },
+        { id: "pin", text: "Pink" },
       ];
       createFormField(
         customContainer,
@@ -145,11 +208,11 @@ Ecwid.OnAPILoaded.add(function () {
         shooterColorOptions
       );
       const shooterOptions = [
-        "Select Shooter Setup",
-        "2 Straights",
-        "1 Straight, 1 U",
-        "2 U's",
-        "Triangle",
+        { id: "", text: "Select Shooter Setup" },
+        { id: "2s", text: "2 Straights" },
+        { id: "1s1u", text: "1 Straight, 1 U" },
+        { id: "2u", text: "2 U's" },
+        { id: "tri", text: "Triangle" },
       ];
       createFormField(
         customContainer,
@@ -158,7 +221,12 @@ Ecwid.OnAPILoaded.add(function () {
         "custom-shooter-setup-select",
         shooterOptions
       );
-      const pocketOptions = ["Select Pocket Placement", "High", "Mid", "Low"];
+      const pocketOptions = [
+        { id: "", text: "Select Pocket Placement" },
+        { id: "high", text: "High" },
+        { id: "mid", text: "Mid" },
+        { id: "low", text: "Low" },
+      ];
       createFormField(
         customContainer,
         "Pocket Placement:",
@@ -191,6 +259,8 @@ Ecwid.OnAPILoaded.add(function () {
           "Could not find the target element to inject the form fields."
         );
       }
+
+      setupFormListeners();
 
       // Get buttons
       const unstrungBtn = document.getElementById("unstrung-btn");
