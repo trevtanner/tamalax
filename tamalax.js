@@ -315,7 +315,7 @@ Ecwid.OnAPILoaded.add(function () {
       });
 
       //Set stringing items to cart and add comments(Stringing Selections)
-      const addToBagButton = document.querySelector(".form-control__button");
+      const addToBagButton = document.querySelector("form-control__button");
       addToBagButton.addEventListener("click", () => {
         if (customStringing.stringing == 1) {
           var meshProduct = {
