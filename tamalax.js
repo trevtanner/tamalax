@@ -10,7 +10,7 @@ Ecwid.OnAPILoaded.add(function () {
     console.log("Page category is: " + page.categoryId);
     console.log("Page Main category is: " + page.mainCategoryId);
     console.log("Page is: " + page);
-    if (page.type == "PRODUCT" && page.category == unstrungCategoryId) {
+    if (page.type == "PRODUCT" && page.categoryId == unstrungCategoryId) {
       console.log(
         `
        Page loaded!
