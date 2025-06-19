@@ -9,8 +9,11 @@ Ecwid.OnAPILoaded.add(function () {
     console.log("Page type is: " + page.type);
     console.log("Page category is: " + page.categoryId);
     console.log("Page Main category is: " + page.mainCategoryId);
-    console.log("Page is: " + page);
-    if (page.type == "PRODUCT" && page.categoryId == unstrungCategoryId) {
+    if (
+      page.type == "PRODUCT" &&
+      (page.categoryId == unstrungCategoryId ||
+        page.mainCategoryId == unstrungCategoryId)
+    ) {
       console.log(
         `
        Page loaded!
@@ -315,7 +318,7 @@ Ecwid.OnAPILoaded.add(function () {
       });
 
       //Set stringing items to cart and add comments(Stringing Selections)
-      const addToBagButton = document.querySelector(".form-control__button");
+      const addToBagButton = document.querySelector(".form-control--button");
       addToBagButton.addEventListener("click", () => {
         if (customStringing.stringing == 1) {
           var meshProduct = {
