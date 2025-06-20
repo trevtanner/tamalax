@@ -320,15 +320,15 @@ Ecwid.OnAPILoaded.add(function () {
       //Set stringing items to cart and add comments(Stringing Selections)
       const addToBagButton = document.querySelector(".form-control--button");
       addToBagButton.addEventListener("click", () => {
-        if (customStringing.stringing == 1) {
+        if (customStringing.stringing === 1) {
           var meshProduct = {
             id: customStringing.meshProductId,
             quantity: 1,
             callback: function (success, product, cart) {
               if (success) {
-                console.log("Success");
+                console.log("Mesh added successfully");
               } else {
-                console.log("Fail");
+                console.log("Failed to add mesh");
               }
             },
           };
@@ -337,9 +337,9 @@ Ecwid.OnAPILoaded.add(function () {
             quantity: 1,
             callback: function (success, product, cart) {
               if (success) {
-                console.log("Success");
+                console.log("Stringing Service added successfully");
               } else {
-                console.log("Fail");
+                console.log("Failed to add stringing service");
               }
             },
           };
@@ -359,10 +359,10 @@ Ecwid.OnAPILoaded.add(function () {
               "\nPocket Placement: " +
               customStringing.pocketPlacement,
             function (successCallback) {
-              console.log("Success");
+              console.log("Successfully added comments");
             },
             function (errorCallback) {
-              console.log("Fail");
+              console.log("Failed to add comments");
             }
           );
         }
