@@ -32,6 +32,7 @@ Ecwid.OnAPILoaded.add(function () {
         shooterColor: "",
         shooterSetup: "",
         pocketPlacement: "",
+        totalPrice: page.productId.price + 20.0,
       };
 
       // --- Create Your Custom Field ---
@@ -244,6 +245,16 @@ Ecwid.OnAPILoaded.add(function () {
       // Hide the form by default
       customContainer.classList.add("form-hidden");
       customContainer.classList.remove("my-custom-field-container");
+
+      const totalDiv = document.createElement("div");
+      totalDiv.className = "total-display";
+      const totalLabel = document.createElement("span");
+      totalLabel.innerText = "Total: ";
+      const totalValue = document.createElement("span");
+      totalValue.id = "total-price";
+      totalValue.innerText = "$" + customStringing.totalPrice.toFixed(2); // Initial value
+      customContainer.appendChild(totalLabel);
+      customContainer.appendChild(totalValue);
 
       // Find a place on the page to inject your new custom field
       // For example, right before the "Add to Bag" button.
