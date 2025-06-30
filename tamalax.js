@@ -22,6 +22,7 @@ Ecwid.OnAPILoaded.add(function () {
        Trying to add new field to product page...
         `
       );
+
       const stringingServiceId = 714272866;
       const customStringing = {
         stringing: 0,
@@ -278,6 +279,15 @@ Ecwid.OnAPILoaded.add(function () {
         customContainer.classList.remove("my-custom-field-container");
         customContainer.classList.add("form-hidden");
         customStringing.stringing = 0;
+
+        //Design Configs
+        window.ec = window.ec || Object();
+        window.ec.storefront = window.ec.storefront || Object();
+        window.ec.storefront.product_details_show_buy_button = true;
+        window.ec.storefront.product_details_show_product_price = true;
+
+        // Apply design configs
+        Ecwid.refreshConfig && Ecwid.refreshConfig();
       });
 
       // Event listener for the "Custom Stringing" button
@@ -287,6 +297,15 @@ Ecwid.OnAPILoaded.add(function () {
         customContainer.classList.add("my-custom-field-container");
         customContainer.classList.remove("form-hidden");
         customStringing.stringing = 1;
+
+        //Design Configs
+        window.ec = window.ec || Object();
+        window.ec.storefront = window.ec.storefront || Object();
+        window.ec.storefront.product_details_show_buy_button = false;
+        window.ec.storefront.product_details_show_product_price = false;
+
+        // Apply design configs
+        Ecwid.refreshConfig && Ecwid.refreshConfig();
       });
 
       //for hover tooltips
