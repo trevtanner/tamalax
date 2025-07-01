@@ -19,6 +19,7 @@ Ecwid.OnAPILoaded.add(function () {
        Page loaded!
        Ecwid store ID is: ${Ecwid.getOwnerId()}
        Product ID is: ${page.productId}
+       Page is: ${page}
        Trying to add new field to product page...
         `
       );
@@ -32,7 +33,7 @@ Ecwid.OnAPILoaded.add(function () {
         shooterColor: "",
         shooterSetup: "",
         pocketPlacement: "",
-        totalPrice: page.productId.price + 20.0,
+        totalPrice: page.price + 20.0,
       };
 
       // --- Create Your Custom Field ---
