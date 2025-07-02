@@ -23,6 +23,9 @@ Ecwid.OnAPILoaded.add(function () {
        Trying to add new field to product page...
         `
       );
+    console.log("page:");
+    console.log(page);
+
 
       const stringingServiceId = 714272866;
       const customStringing = {
@@ -34,7 +37,7 @@ Ecwid.OnAPILoaded.add(function () {
         shooterSetup: "",
         pocketPlacement: "",
         totalPrice: page.price + 20.0,
-      };
+      }; 
 
       // --- Create Your Custom Field ---
       // This is just standard JavaScript DOM manipulation.
@@ -309,7 +312,7 @@ Ecwid.OnAPILoaded.add(function () {
         customContainer.classList.add("my-custom-field-container");
         customContainer.classList.remove("form-hidden");
         customStringing.stringing = 1;
-
+ 
         //Design Configs
         window.ec = window.ec || Object();
         window.ec.storefront = window.ec.storefront || Object();
