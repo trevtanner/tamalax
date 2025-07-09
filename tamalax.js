@@ -39,6 +39,7 @@ Ecwid.OnAPILoaded.add(function () {
         totalPrice: page.price + 20.0,
       }; 
 
+      
       // --- Create Your Custom Field ---
       // This is just standard JavaScript DOM manipulation.
       // You can create any HTML elements you want.
