@@ -24,7 +24,7 @@ Ecwid.OnAPILoaded.add(function () {
         `
       );
     console.log("page:");
-    console.log(JSON.stringify(page.filterParams.attributes));
+    // console.log(JSON.stringify(page.filterParams.attributes));
 
 
       const stringingServiceId = 714272866;
@@ -356,8 +356,7 @@ Ecwid.OnAPILoaded.add(function () {
       const addToBagButton = document.querySelector(".form-control--button");
       addToBagButton.addEventListener("click", () => {
         if (customStringing.stringing === 1) {
-          var meshProduct = {
-            id: customStringing.meshProductId,
+          var meshProduct = { 
             quantity: 1,
             callback: function (success, product, cart) {
               if (success) {
@@ -405,3 +404,4 @@ Ecwid.OnAPILoaded.add(function () {
     }
   });
 });
+ 
