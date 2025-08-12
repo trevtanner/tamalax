@@ -23,9 +23,8 @@ Ecwid.OnAPILoaded.add(function () {
        Trying to add new field to product page...
         `
       );
-    console.log("page:");
-    // console.log(JSON.stringify(page.filterParams.attributes));
-
+      console.log("page:");
+      // console.log(JSON.stringify(page.filterParams.attributes));
 
       const stringingServiceId = 714272866;
       const customStringing = {
@@ -37,9 +36,8 @@ Ecwid.OnAPILoaded.add(function () {
         shooterSetup: "",
         pocketPlacement: "",
         totalPrice: page.price + 20.0,
-      }; 
+      };
 
-      
       // --- Create Your Custom Field ---
       // This is just standard JavaScript DOM manipulation.
       // You can create any HTML elements you want.
@@ -313,7 +311,7 @@ Ecwid.OnAPILoaded.add(function () {
         customContainer.classList.add("my-custom-field-container");
         customContainer.classList.remove("form-hidden");
         customStringing.stringing = 1;
- 
+
         //Design Configs
         window.ec = window.ec || Object();
         window.ec.storefront = window.ec.storefront || Object();
@@ -356,7 +354,7 @@ Ecwid.OnAPILoaded.add(function () {
       const addToBagButton = document.querySelector(".form-control--button");
       addToBagButton.addEventListener("click", () => {
         if (customStringing.stringing === 1) {
-          var meshProduct = { 
+          var meshProduct = {
             quantity: 1,
             callback: function (success, product, cart) {
               if (success) {
@@ -404,4 +402,3 @@ Ecwid.OnAPILoaded.add(function () {
     }
   });
 });
- 
