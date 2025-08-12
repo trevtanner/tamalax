@@ -26,6 +26,13 @@ Ecwid.OnAPILoaded.add(function () {
       console.log("page:");
       // console.log(JSON.stringify(page.filterParams.attributes));
 
+      const productPriceElement = document.querySelector('[itemprop="price"]');
+      const priceSpan = document.querySelector(
+        ".details-product-price__value.ec-price-item"
+      );
+      const currentPriceString = productPriceElement.getAttribute("content");
+      const currentPriceNumber = parseFloat(currentPriceString);
+
       const stringingServiceId = 714272866;
       const customStringing = {
         stringing: 0,
@@ -35,7 +42,7 @@ Ecwid.OnAPILoaded.add(function () {
         shooterColor: "",
         shooterSetup: "",
         pocketPlacement: "",
-        totalPrice: page.price + 20.0,
+        totalPrice: currentPriceNumber + 20.0,
       };
 
       // --- Create Your Custom Field ---
@@ -73,6 +80,11 @@ Ecwid.OnAPILoaded.add(function () {
             option.id = optionData.id;
             // Set the displayed text to the Text from our object
             option.innerText = optionData.text;
+
+            if (optionData.price !== undefined) {
+              option.dataset.price = optionData.price;
+            }
+
             input.appendChild(option);
           });
 
@@ -130,7 +142,19 @@ Ecwid.OnAPILoaded.add(function () {
         // Add a 'change' event listener to each select element
         meshSelect.addEventListener("change", (event) => {
           customStringing.mesh = event.target.value;
-          customStringing.meshProductId = event.target.selectedOptions[0].id;
+          const selectedOption = event.target.selectedOptions[0];
+          customStringing.meshProductId = selectedOption.id;
+          // Get the price from the data-price attribute, converted to a number
+          const meshPrice = parseFloat(selectedOption.dataset.price);
+          customStringing.totalPrice = currentPriceNumber + 20.0 + meshPrice;
+          // Update the content attribute on the div
+          productPriceElement.setAttribute(
+            "content",
+            customStringing.totalPrice.toFixed(2)
+          );
+
+          // Update the text content of the span
+          priceSpan.textContent = `$${customStringing.totalPrice.toFixed(2)}`;
           console.log(customStringing); // For testing
         });
 
@@ -165,12 +189,12 @@ Ecwid.OnAPILoaded.add(function () {
       createOptionButtons(buttonContainer);
       const meshOptions = [
         { text: "Select Mesh", id: "" },
-        { text: "StringKing White 5x", id: 713353000 },
-        { text: "StringKing White 5s", id: 760238689 },
-        { text: "StringKing Black 5x", id: 1 },
-        { text: "StringKing Black 5s", id: 2 },
-        { text: "ECD HERO 4.0 White", id: 3 },
-        { text: "ECD HERO 4.0 Black", id: 4 },
+        { text: "StringKing White 5x", id: 713353000, price: 19.99 },
+        { text: "StringKing White 5s", id: 760238689, price: 19.99 },
+        { text: "StringKing Black 5x", id: 1, price: 19.99 },
+        { text: "StringKing Black 5s", id: 2, price: 19.99 },
+        { text: "ECD HERO 4.0 White", id: 3, price: 29.99 },
+        { text: "ECD HERO 4.0 Black", id: 4, price: 29.99 },
       ];
       createFormField(
         customContainer,
@@ -249,15 +273,15 @@ Ecwid.OnAPILoaded.add(function () {
       customContainer.classList.add("form-hidden");
       customContainer.classList.remove("my-custom-field-container");
 
-      const totalDiv = document.createElement("div");
-      totalDiv.className = "total-display";
-      const totalLabel = document.createElement("span");
-      totalLabel.innerText = "Total: ";
-      const totalValue = document.createElement("span");
-      totalValue.id = "total-price";
-      totalValue.innerText = "$" + customStringing.totalPrice.toFixed(2); // Initial value
-      customContainer.appendChild(totalLabel);
-      customContainer.appendChild(totalValue);
+      // const totalDiv = document.createElement("div");
+      // totalDiv.className = "total-display";
+      // const totalLabel = document.createElement("span");
+      // totalLabel.innerText = "Total: ";
+      // const totalValue = document.createElement("span");
+      // totalValue.id = "total-price";
+      // totalValue.innerText = "$" + customStringing.totalPrice.toFixed(2); // Initial value
+      // customContainer.appendChild(totalLabel);
+      // customContainer.appendChild(totalValue);
 
       // Find a place on the page to inject your new custom field
       // For example, right before the "Add to Bag" button.
@@ -293,12 +317,17 @@ Ecwid.OnAPILoaded.add(function () {
         customContainer.classList.remove("my-custom-field-container");
         customContainer.classList.add("form-hidden");
         customStringing.stringing = 0;
+        productPriceElement.setAttribute(
+          "content",
+          currentPriceNumber.toFixed(2)
+        );
+        priceSpan.textContent = `$${currentPriceNumber.toFixed(2)}`;
 
         //Design Configs
         window.ec = window.ec || Object();
         window.ec.storefront = window.ec.storefront || Object();
         // window.ec.storefront.product_details_show_buy_button = true;
-        window.ec.storefront.product_details_show_product_price = true;
+        // window.ec.storefront.product_details_show_product_price = true;
 
         // Apply design configs
         Ecwid.refreshConfig && Ecwid.refreshConfig();
@@ -311,12 +340,17 @@ Ecwid.OnAPILoaded.add(function () {
         customContainer.classList.add("my-custom-field-container");
         customContainer.classList.remove("form-hidden");
         customStringing.stringing = 1;
+        productPriceElement.setAttribute(
+          "content",
+          customStringing.totalPrice.toFixed(2)
+        );
+        priceSpan.textContent = `$${customStringing.totalPrice.toFixed(2)}`;
 
         //Design Configs
         window.ec = window.ec || Object();
         window.ec.storefront = window.ec.storefront || Object();
         // window.ec.storefront.product_details_show_buy_button = false;
-        window.ec.storefront.product_details_show_product_price = false;
+        // window.ec.storefront.product_details_show_product_price = false;
 
         // Apply design configs
         Ecwid.refreshConfig && Ecwid.refreshConfig();
@@ -351,6 +385,7 @@ Ecwid.OnAPILoaded.add(function () {
       });
 
       //Set stringing items to cart and add comments(Stringing Selections)
+
       const addToBagButton = document.querySelector(".form-control--button");
       addToBagButton.addEventListener("click", () => {
         if (customStringing.stringing === 1) {
