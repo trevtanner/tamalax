@@ -116,7 +116,7 @@ Ecwid.OnAPILoaded.add(function () {
         const customBtn = document.createElement("button");
         customBtn.className = "option-button";
         customBtn.id = "custom-btn";
-        customBtn.textContent = "Custom Stringing";
+        customBtn.textContent = "Custom Stringing (+20.00)";
         customBtn.dataset.tooltip = "+$20.00";
 
         optionsContainer.appendChild(unstrungBtn);
@@ -189,12 +189,12 @@ Ecwid.OnAPILoaded.add(function () {
       createOptionButtons(buttonContainer);
       const meshOptions = [
         { text: "Select Mesh", id: "" },
-        { text: "StringKing White 5x", id: 713353000, price: 19.99 },
-        { text: "StringKing White 5s", id: 760238689, price: 19.99 },
-        { text: "StringKing Black 5x", id: 1, price: 19.99 },
-        { text: "StringKing Black 5s", id: 2, price: 19.99 },
-        { text: "ECD HERO 4.0 White", id: 3, price: 29.99 },
-        { text: "ECD HERO 4.0 Black", id: 4, price: 29.99 },
+        { text: "StringKing White 5x (+19.99)", id: 713353000, price: 19.99 },
+        { text: "StringKing White 5s (+19.99)", id: 760238689, price: 19.99 },
+        { text: "StringKing Black 5x (+19.99)", id: 1, price: 19.99 },
+        { text: "StringKing Black 5s (+19.99)", id: 2, price: 19.99 },
+        { text: "ECD HERO 4.0 White (+24.99)", id: 3, price: 24.99 },
+        { text: "ECD HERO 4.0 Black (+24.99)", id: 4, price: 24.99 },
       ];
       createFormField(
         customContainer,
