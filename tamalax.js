@@ -428,6 +428,13 @@ Ecwid.OnAPILoaded.add(function () {
         var stringingServiceProduct = {
           id: stringingServiceId,
           quantity: 1,
+          options: {
+            Mesh: customStringing.mesh,
+            "Sidewall Color": customStringing.sidewallColor,
+            "Shooter Color": customStringing.shooterColor,
+            "Shooter Setup": customStringing.shooterSetup,
+            "Pocket Placement": customStringing.pocketPlacement,
+          },
           callback: function (success, product, cart) {
             if (success) {
               console.log("Stringing Service added successfully");
@@ -450,7 +457,7 @@ Ecwid.OnAPILoaded.add(function () {
         };
 
         Ecwid.Cart.addProduct(headProduct);
-        Ecwid.Cart.addProduct(meshProduct);
+        // Ecwid.Cart.addProduct(meshProduct);
         Ecwid.Cart.addProduct(stringingServiceProduct);
 
         Ecwid.Cart.setOrderComments(
