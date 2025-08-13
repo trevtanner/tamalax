@@ -139,6 +139,29 @@ Ecwid.OnAPILoaded.add(function () {
           "custom-pocket-placement-input"
         );
 
+        const newBuyButton = document.getElementById("new-buy-btn");
+
+        // New function to check if all selections are made
+        function checkFormValidity() {
+          return (
+            customStringing.mesh !== "" &&
+            customStringing.sidewallColor !== "" &&
+            customStringing.shooterColor !== "" &&
+            customStringing.shooterSetup !== "" &&
+            customStringing.pocketPlacement !== ""
+          );
+        }
+        function updateButtonState() {
+          if (checkFormValidity()) {
+            newBuyButton.disabled = false;
+            newBuyButton.className = "new-buy-button active";
+            newBuyButton.textContent = "Add to Bag";
+          } else {
+            newBuyButton.disabled = true;
+            newBuyButton.textContent = "Please make all selections";
+          }
+        }
+
         // Add a 'change' event listener to each select element
         meshSelect.addEventListener("change", (event) => {
           customStringing.mesh = event.target.value;
@@ -155,26 +178,31 @@ Ecwid.OnAPILoaded.add(function () {
 
           // Update the text content of the span
           priceSpan.textContent = `$${customStringing.totalPrice.toFixed(2)}`;
+          updateButtonState();
           console.log(customStringing); // For testing
         });
 
         sidewallSelect.addEventListener("change", (event) => {
           customStringing.sidewallColor = event.target.value;
+          updateButtonState();
           console.log(customStringing); // For testing
         });
 
         shooterColorSelect.addEventListener("change", (event) => {
           customStringing.shooterColor = event.target.value;
+          updateButtonState();
           console.log(customStringing); // For testing
         });
 
         shooterSetupSelect.addEventListener("change", (event) => {
           customStringing.shooterSetup = event.target.value;
+          updateButtonState();
           console.log(customStringing); // For testing
         });
 
         pocketPlacementSelect.addEventListener("change", (event) => {
           customStringing.pocketPlacement = event.target.value;
+          updateButtonState();
           console.log(customStringing); // For testing
         });
       }
@@ -275,9 +303,10 @@ Ecwid.OnAPILoaded.add(function () {
       customContainer.classList.remove("my-custom-field-container");
 
       const newBuyButton = document.createElement("button");
-      newBuyButton.className = "new-buy-button active"; // Active by default
+      newBuyButton.className = "new-buy-button disabled";
       newBuyButton.id = "new-buy-btn";
-      newBuyButton.textContent = "Add to Bag";
+      newBuyButton.textContent = "Please make all selections"; // Initial message
+      newBuyButton.disabled = true; // Disabled by default
       customContainer.appendChild(newBuyButton);
 
       // Find a place on the page to inject your new custom field
