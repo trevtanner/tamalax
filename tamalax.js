@@ -189,10 +189,10 @@ Ecwid.OnAPILoaded.add(function () {
       createOptionButtons(buttonContainer);
       const meshOptions = [
         { text: "Select Mesh", id: "" },
-        { text: "StringKing White 5x (+19.99)", id: 713353000, price: 19.99 },
-        { text: "StringKing White 5s (+19.99)", id: 760238689, price: 19.99 },
-        { text: "StringKing Black 5x (+19.99)", id: 1, price: 19.99 },
-        { text: "StringKing Black 5s (+19.99)", id: 2, price: 19.99 },
+        { text: "StringKing White 5x (+29.99)", id: 713353000, price: 29.99 },
+        { text: "StringKing White 5s (+29.99)", id: 760238689, price: 19.99 },
+        { text: "StringKing Black 5x (+29.99)", id: 1, price: 29.99 },
+        { text: "StringKing Black 5s (+29.99)", id: 2, price: 29.99 },
         { text: "ECD HERO 4.0 White (+24.99)", id: 3, price: 24.99 },
         { text: "ECD HERO 4.0 Black (+24.99)", id: 4, price: 24.99 },
       ];
