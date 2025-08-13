@@ -78,21 +78,19 @@ select:focus {
   box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
 }
 
-/* Style for the "Add to Bag" button */
-.details-product-purchase__add-to-bag {
-  background: linear-gradient(45deg, #3498db, #2980b9);
-  color: white;
-  padding: 15px;
+.new-buy-button.active {
+  flex: 1;
+  padding: 10px !important;
   border: none;
-  border-radius: 8px;
-  text-align: center;
-  font-weight: 700;
-  font-size: 18px;
   cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
+  font-size: 16px;
+  background-color: #3498db;
+  color: white;
+  font-weight: 700;
+  background: black;
 }
 
-.details-product-purchase__add-to-bag:hover {
+.new-buy-button:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
 }

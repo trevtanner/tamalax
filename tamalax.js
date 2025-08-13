@@ -243,10 +243,11 @@ Ecwid.OnAPILoaded.add(function () {
       );
       const shooterOptions = [
         { id: "", text: "Select Shooter Setup" },
-        { id: "2s", text: "2 Straights" },
-        { id: "1s1u", text: "1 Straight, 1 U" },
-        { id: "2u", text: "2 U's" },
-        { id: "tri", text: "Triangle" },
+        { id: "1s", text: "1 Straight Hockey Lace" },
+        { id: "1s1n", text: "1 Straight Hockey Lace, 1 Nylon" },
+        { id: "2s", text: "2 Straight Hockey Lace" },
+        { id: "2s1n", text: "2 Straight Hockey Lace, 1 Nylon" },
+        { id: "3s", text: "3 Straight Hockey Lace" },
       ];
       createFormField(
         customContainer,
@@ -273,15 +274,11 @@ Ecwid.OnAPILoaded.add(function () {
       customContainer.classList.add("form-hidden");
       customContainer.classList.remove("my-custom-field-container");
 
-      // const totalDiv = document.createElement("div");
-      // totalDiv.className = "total-display";
-      // const totalLabel = document.createElement("span");
-      // totalLabel.innerText = "Total: ";
-      // const totalValue = document.createElement("span");
-      // totalValue.id = "total-price";
-      // totalValue.innerText = "$" + customStringing.totalPrice.toFixed(2); // Initial value
-      // customContainer.appendChild(totalLabel);
-      // customContainer.appendChild(totalValue);
+      const newBuyButton = document.createElement("button");
+      newBuyButton.className = "new-buy-button active"; // Active by default
+      newBuyButton.id = "new-buy-btn";
+      newBuyButton.textContent = "Add to Bag";
+      customContainer.appendChild(newBuyButton);
 
       // Find a place on the page to inject your new custom field
       // For example, right before the "Add to Bag" button.
@@ -386,53 +383,65 @@ Ecwid.OnAPILoaded.add(function () {
 
       //Set stringing items to cart and add comments(Stringing Selections)
 
-      const addToBagButton = document.querySelector(".form-control--button");
+      const addToBagButton = document.querySelector(".new-buy-button");
       addToBagButton.addEventListener("click", () => {
-        if (customStringing.stringing === 1) {
-          var meshProduct = {
-            quantity: 1,
-            callback: function (success, product, cart) {
-              if (success) {
-                console.log("Mesh added successfully");
-              } else {
-                console.log("Failed to add mesh");
-              }
-            },
-          };
-          var stringingServiceProduct = {
-            id: stringingServiceId,
-            quantity: 1,
-            callback: function (success, product, cart) {
-              if (success) {
-                console.log("Stringing Service added successfully");
-              } else {
-                console.log("Failed to add stringing service");
-              }
-            },
-          };
-
-          Ecwid.Cart.addProduct(meshProduct);
-          Ecwid.Cart.addProduct(stringingServiceProduct);
-
-          Ecwid.Cart.setOrderComments(
-            "Mesh: " +
-              customStringing.mesh +
-              "\nSidewall Color: " +
-              customStringing.sidewallColor +
-              "\nShooter Color: " +
-              customStringing.shooterColor +
-              "\nShooter Setup: " +
-              customStringing.shooterSetup +
-              "\nPocket Placement: " +
-              customStringing.pocketPlacement,
-            function (successCallback) {
-              console.log("Successfully added comments");
-            },
-            function (errorCallback) {
-              console.log("Failed to add comments");
+        var meshProduct = {
+          id: customStringing.meshProductId,
+          quantity: 1,
+          callback: function (success, product, cart) {
+            if (success) {
+              console.log("Mesh added successfully");
+            } else {
+              console.log("Failed to add mesh");
             }
-          );
-        }
+          },
+        };
+        var stringingServiceProduct = {
+          id: stringingServiceId,
+          quantity: 1,
+          callback: function (success, product, cart) {
+            if (success) {
+              console.log("Stringing Service added successfully");
+            } else {
+              console.log("Failed to add stringing service");
+            }
+          },
+        };
+
+        var headProduct = {
+          id: page.productId,
+          quantity: 1,
+          callback: function (success, product, cart) {
+            if (success) {
+              console.log("Head added successfully");
+            } else {
+              console.log("Failed to add stringing service");
+            }
+          },
+        };
+
+        Ecwid.Cart.addProduct(headProduct);
+        Ecwid.Cart.addProduct(meshProduct);
+        Ecwid.Cart.addProduct(stringingServiceProduct);
+
+        Ecwid.Cart.setOrderComments(
+          "Mesh: " +
+            customStringing.mesh +
+            "\nSidewall Color: " +
+            customStringing.sidewallColor +
+            "\nShooter Color: " +
+            customStringing.shooterColor +
+            "\nShooter Setup: " +
+            customStringing.shooterSetup +
+            "\nPocket Placement: " +
+            customStringing.pocketPlacement,
+          function (successCallback) {
+            console.log("Successfully added comments");
+          },
+          function (errorCallback) {
+            console.log("Failed to add comments");
+          }
+        );
       });
     }
   });
