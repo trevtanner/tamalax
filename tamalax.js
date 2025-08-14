@@ -42,7 +42,7 @@ Ecwid.OnAPILoaded.add(function () {
         shooterColor: "",
         shooterSetup: "",
         pocketPlacement: "",
-        totalPrice: currentPriceNumber + 20.0,
+        totalPrice: currentPriceNumber + 29.99,
       };
 
       // --- Create Your Custom Field ---
@@ -116,8 +116,8 @@ Ecwid.OnAPILoaded.add(function () {
         const customBtn = document.createElement("button");
         customBtn.className = "option-button";
         customBtn.id = "custom-btn";
-        customBtn.textContent = "Custom Stringing (+20.00)";
-        customBtn.dataset.tooltip = "+$20.00";
+        customBtn.textContent = "Custom Stringing (+29.99)";
+        customBtn.dataset.tooltip = "+$29.99";
 
         optionsContainer.appendChild(unstrungBtn);
         optionsContainer.appendChild(customBtn);
@@ -169,7 +169,7 @@ Ecwid.OnAPILoaded.add(function () {
           customStringing.meshProductId = selectedOption.id;
           // Get the price from the data-price attribute, converted to a number
           const meshPrice = parseFloat(selectedOption.dataset.price);
-          customStringing.totalPrice = currentPriceNumber + 20.0 + meshPrice;
+          customStringing.totalPrice = currentPriceNumber + 29.99 + meshPrice;
           // Update the content attribute on the div
           productPriceElement.setAttribute(
             "content",
