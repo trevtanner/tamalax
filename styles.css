@@ -8,7 +8,7 @@
   display: flex;
   justify-content: center;
   margin-bottom: 20px !important;
-  border: 1px solid #ddd;
+  border: 2px solid #555;
   border-radius: 10px;
   overflow: hidden;
 }
@@ -16,8 +16,7 @@
 .option-button {
   flex: 1;
   padding: 10px !important;
-  border: 1px;
-  border-color: #555;
+  border: 2px solid #555;
   background-color: #f8f9fa;
   cursor: pointer;
   font-size: 16px;
@@ -34,8 +33,6 @@
   background-color: #3498db;
   color: white;
   font-weight: 700;
-  border: 1px;
-  border-color: #000000;
 }
 
 .option-button:not(.active):hover {
