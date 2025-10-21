@@ -513,10 +513,12 @@ Ecwid.OnAPILoaded.add(function () {
       }
 
       //Design Configs
+
       window.ec = window.ec || Object();
       window.ec.storefront = window.ec.storefront || Object();
       window.ec.storefront.product_details_show_buy_button = false;
       window.ec.storefront.product_details_show_product_price = false;
+      Ecwid.refreshConfig && Ecwid.refreshConfig();
     }
   });
 });
