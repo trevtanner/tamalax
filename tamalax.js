@@ -9,6 +9,8 @@ Ecwid.OnAPILoaded.add(function () {
     console.log("Page type is: " + page.type);
     console.log("Page category is: " + page.categoryId);
     console.log("Page Main category is: " + page.mainCategoryId);
+
+    //Custom Stringing Form
     if (
       page.type == "PRODUCT" &&
       (page.categoryId == unstrungCategoryId ||
@@ -45,9 +47,6 @@ Ecwid.OnAPILoaded.add(function () {
         totalPrice: currentPriceNumber + 29.99,
       };
 
-      // --- Create Your Custom Field ---
-      // This is just standard JavaScript DOM manipulation.
-      // You can create any HTML elements you want.
       function createFormField(
         container,
         labelText,
@@ -484,9 +483,20 @@ Ecwid.OnAPILoaded.add(function () {
       });
     }
 
+    //STX product check
     if (page.name.includes("STX")) {
-      console.log("This is and STX Product");
+      console.log("This is an STX Product");
       console.log("Removing price and ability to purchase online");
+      const priceSpan = document.querySelector(
+        ".details-product-price__value.ec-price-item"
+      );
+
+      function updateButtonState() {
+        newBuyButton.disabled = true;
+        newBuyButton.textContent = "Avaliable In Store Only";
+      }
+      priceSpan.textContent = ``;
+      updateButtonState();
     }
   });
 });
