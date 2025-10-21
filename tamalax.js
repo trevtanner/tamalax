@@ -19,7 +19,7 @@ Ecwid.OnAPILoaded.add(function () {
        Page loaded!
        Ecwid store ID is: ${Ecwid.getOwnerId()}
        Product ID is: ${page.productId}
-       Page is: ${page}
+       Page is: ${JSON.stringify(page)}
        Trying to add new field to product page...
         `
       );
