@@ -483,5 +483,10 @@ Ecwid.OnAPILoaded.add(function () {
         );
       });
     }
+
+    if (page.name.includes("STX")) {
+      console.log("This is and STX Product");
+      console.log("Removing price and ability to purchase online");
+    }
   });
 });
