@@ -484,7 +484,7 @@ Ecwid.OnAPILoaded.add(function () {
     }
 
     //STX product check
-    if (page.name.includes("STX")) {
+    if (page.type == "PRODUCT" && page.name.includes("STX")) {
       console.log("This is an STX Product");
       console.log("Removing price and ability to purchase online");
       const priceSpan = document.querySelector(
