@@ -14,7 +14,8 @@ Ecwid.OnAPILoaded.add(function () {
     if (
       page.type == "PRODUCT" &&
       (page.categoryId == unstrungCategoryId ||
-        page.mainCategoryId == unstrungCategoryId)
+        page.mainCategoryId == unstrungCategoryId) &&
+      !page.name.includes("STX")
     ) {
       console.log(
         `
