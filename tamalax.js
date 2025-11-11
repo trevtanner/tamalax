@@ -533,6 +533,7 @@ Ecwid.OnAPILoaded.add(function () {
             "Shooter Color": customStringing.shooterColor,
             "Shooter Setup": customStringing.shooterSetup,
             "Pocket Placement": customStringing.pocketPlacement,
+            "Head": page.name,
           },
           callback: function (success, product, cart) {
             if (success) {
