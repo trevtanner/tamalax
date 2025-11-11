@@ -122,3 +122,84 @@ select:focus {
   visibility: visible;
   opacity: 1;
 }
+
+/* --- Custom Dropdown Styles --- */
+
+/* Container for the custom dropdown to position elements correctly */
+.custom-dropdown-container {
+  position: relative;
+}
+
+/* The visible part of the dropdown, styled to look like a select box */
+.custom-dropdown-display {
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+  background-color: #fff;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+/* Add a down-arrow icon */
+.custom-dropdown-display::after {
+  content: "▼";
+  font-size: 0.7em;
+  color: #888;
+}
+
+/* Style changes when the dropdown is open or focused */
+.custom-dropdown-display.open,
+.custom-dropdown-display:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+}
+
+/* The list of options, hidden by default */
+.custom-dropdown-options {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-top: none;
+  border-radius: 0 0 8px 8px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  z-index: 1000;
+  max-height: 200px;
+  overflow-y: auto;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.custom-dropdown-options.open {
+  display: block;
+}
+
+/* Individual option styling */
+.custom-dropdown-option {
+  padding: 12px 15px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.custom-dropdown-option:hover {
+  background-color: #f4f4f9;
+}
+
+/* The colored box itself */
+.color-box {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  flex-shrink: 0; /* Prevents the box from shrinking */
+}

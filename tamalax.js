@@ -48,6 +48,109 @@ Ecwid.OnAPILoaded.add(function () {
         totalPrice: currentPriceNumber + 29.99,
       };
 
+      // --- NEW: Function to create a custom dropdown ---
+      function createCustomDropdown(
+        container,
+        labelText,
+        inputId,
+        options,
+        stringingKey
+      ) {
+        const fieldDiv = document.createElement("div");
+        fieldDiv.className = "form-field custom-dropdown-container";
+
+        const label = document.createElement("label");
+        label.innerText = labelText;
+        label.htmlFor = inputId;
+
+        // This hidden select will store the actual value for form submission purposes
+        const hiddenSelect = document.createElement("select");
+        hiddenSelect.id = inputId;
+        hiddenSelect.style.display = "none"; // Hide it from the user
+
+        // The visible part of our dropdown
+        const dropdownDisplay = document.createElement("div");
+        dropdownDisplay.className = "custom-dropdown-display";
+        dropdownDisplay.tabIndex = 0; // Make it focusable
+
+        const displayValue = document.createElement("span");
+        displayValue.className = "custom-dropdown-value";
+        displayValue.innerText = options[0].text; // "Select Sidewall Color"
+        dropdownDisplay.appendChild(displayValue);
+
+        // The list of options
+        const optionsList = document.createElement("ul");
+        optionsList.className = "custom-dropdown-options";
+
+        options.forEach((optionData, index) => {
+          // Create the hidden native option
+          const nativeOption = document.createElement("option");
+          nativeOption.value = optionData.text;
+          nativeOption.id = optionData.id;
+          if (index === 0) {
+            nativeOption.disabled = true;
+            nativeOption.selected = true;
+          }
+          hiddenSelect.appendChild(nativeOption);
+
+          // Create the visible list item
+          const listItem = document.createElement("li");
+          listItem.className = "custom-dropdown-option";
+          listItem.dataset.value = optionData.text;
+          listItem.dataset.id = optionData.id;
+
+          if (optionData.color) {
+            const colorBox = document.createElement("span");
+            colorBox.className = "color-box";
+            colorBox.style.backgroundColor = optionData.color;
+            if (optionData.color === "white") {
+              colorBox.style.border = "1px solid #ccc";
+            }
+            listItem.appendChild(colorBox);
+          }
+
+          const optionText = document.createElement("span");
+          optionText.innerText = optionData.text;
+          listItem.appendChild(optionText);
+
+          // When an option is clicked
+          listItem.addEventListener("click", () => {
+            displayValue.innerText = optionData.text;
+            hiddenSelect.value = optionData.text;
+
+            // Manually trigger a 'change' event on the hidden select for our existing listeners
+            hiddenSelect.dispatchEvent(new Event("change"));
+
+            optionsList.classList.remove("open");
+            dropdownDisplay.classList.remove("open");
+          });
+
+          optionsList.appendChild(listItem);
+        });
+
+        // Toggle dropdown on click
+        dropdownDisplay.addEventListener("click", () => {
+          optionsList.classList.toggle("open");
+          dropdownDisplay.classList.toggle("open");
+        });
+
+        fieldDiv.appendChild(label);
+        fieldDiv.appendChild(dropdownDisplay);
+        fieldDiv.appendChild(optionsList);
+        fieldDiv.appendChild(hiddenSelect); // Add the hidden select to the DOM
+        container.appendChild(fieldDiv);
+
+        // Close dropdown if clicking outside
+        document.addEventListener("click", (e) => {
+          if (!fieldDiv.contains(e.target)) {
+            optionsList.classList.remove("open");
+            dropdownDisplay.classList.remove("open");
+          }
+        });
+
+        return hiddenSelect; // Return the hidden select so event listeners can be attached
+      }
+
       function createFormField(
         container,
         labelText,
@@ -71,23 +174,18 @@ Ecwid.OnAPILoaded.add(function () {
           if (stringingKey) {
             input.dataset.key = stringingKey;
           }
-
+          // --- KEY CHANGE IS HERE ---
           options.forEach((optionData) => {
             // Looping through objects now
             const option = document.createElement("option");
             // Set the option's value to the ID from our object
             option.value = optionData.text;
             option.id = optionData.id;
-            // Set the displayed text to the Text from our object
             option.innerText = optionData.text;
-
-            if (optionData.price !== undefined) {
-              option.dataset.price = optionData.price;
-            }
 
             input.appendChild(option);
           });
-
+          // --- END OF KEY CHANGE ---
           input.firstChild.setAttribute("disabled", true);
         } else {
           input = document.createElement("input");
@@ -99,6 +197,7 @@ Ecwid.OnAPILoaded.add(function () {
         fieldDiv.appendChild(label);
         fieldDiv.appendChild(input);
         container.appendChild(fieldDiv);
+        return input; // Return the created input/select
       }
 
       // --- Function to create and inject the option buttons ---
@@ -217,12 +316,12 @@ Ecwid.OnAPILoaded.add(function () {
       createOptionButtons(buttonContainer);
       const meshOptions = [
         { text: "Select Mesh", id: "" },
-        { text: "StringKing White 5x (+29.99)", id: 713353000, price: 29.99 },
-        { text: "StringKing White 5s (+29.99)", id: 760238689, price: 29.99 },
-        { text: "StringKing Black 5x (+29.99)", id: 1, price: 29.99 },
-        { text: "StringKing Black 5s (+29.99)", id: 2, price: 29.99 },
-        { text: "ECD HERO 4.0 White (+24.99)", id: 3, price: 24.99 },
-        { text: "ECD HERO 4.0 Black (+24.99)", id: 4, price: 24.99 },
+        { text: "StringKing White 5x (+29.99)", id: 1, price: 29.99 },
+        { text: "StringKing White 5s (+29.99)", id: 2, price: 29.99 },
+        { text: "StringKing Black 5x (+29.99)", id: 3, price: 29.99 },
+        { text: "StringKing Black 5s (+29.99)", id: 4, price: 29.99 },
+        { text: "ECD HERO 4.0 White (+24.99)", id: 5, price: 24.99 },
+        { text: "ECD HERO 4.0 Black (+24.99)", id: 6, price: 24.99 },
       ];
       createFormField(
         customContainer,
@@ -233,15 +332,15 @@ Ecwid.OnAPILoaded.add(function () {
       );
       const sidewallColorOptions = [
         { id: "", text: "Select Sidewall Color" },
-        { id: "wht", text: "White" },
-        { id: "blk", text: "Black" },
-        { id: "red", text: "Red" },
-        { id: "blu", text: "Blue" },
-        { id: "grn", text: "Green" },
-        { id: "yel", text: "Yellow" },
-        { id: "org", text: "Orange" },
-        { id: "pur", text: "Purple" },
-        { id: "pin", text: "Pink" },
+        { id: "wht", text: "White", color: "white" },
+        { id: "blk", text: "Black", color: "black" },
+        { id: "red", text: "Red", color: "red" },
+        { id: "blu", text: "Blue", color: "blue" },
+        { id: "grn", text: "Green", color: "green" },
+        { id: "yel", text: "Yellow", color: "yellow" },
+        { id: "org", text: "Orange", color: "orange" },
+        { id: "pur", text: "Purple", color: "purple" },
+        { id: "pin", text: "Pink", color: "pink" },
       ];
       createFormField(
         customContainer,
@@ -252,15 +351,15 @@ Ecwid.OnAPILoaded.add(function () {
       );
       const shooterColorOptions = [
         { id: "", text: "Select Shooter Color" },
-        { id: "wht", text: "White" },
-        { id: "blk", text: "Black" },
-        { id: "red", text: "Red" },
-        { id: "blu", text: "Blue" },
-        { id: "grn", text: "Green" },
-        { id: "yel", text: "Yellow" },
-        { id: "org", text: "Orange" },
-        { id: "pur", text: "Purple" },
-        { id: "pin", text: "Pink" },
+        { id: "wht", text: "White", color: "white" },
+        { id: "blk", text: "Black", color: "black" },
+        { id: "red", text: "Red", color: "red" },
+        { id: "blu", text: "Blue", color: "blue" },
+        { id: "grn", text: "Green", color: "green" },
+        { id: "yel", text: "Yellow", color: "yellow" },
+        { id: "org", text: "Orange", color: "orange" },
+        { id: "pur", text: "Purple", color: "purple" },
+        { id: "pin", text: "Pink", color: "pink" },
       ];
       createFormField(
         customContainer,
