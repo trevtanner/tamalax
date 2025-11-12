@@ -51,6 +51,7 @@
 .form-field {
   display: flex;
   flex-direction: column;
+  /* position: relative; <- This was the issue, remove it */
 }
 
 label {
@@ -162,7 +163,7 @@ select:focus {
 /* The list of options, hidden by default */
 .custom-dropdown-options {
   display: none;
-  position: absolute;
+  position: relative;
   top: 100%;
   left: 0;
   right: 0;

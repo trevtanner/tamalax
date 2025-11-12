@@ -48,7 +48,115 @@ Ecwid.OnAPILoaded.add(function () {
         totalPrice: currentPriceNumber + 29.99,
       };
 
-      function createFormField(
+      function createCustomDropdown(
+        container,
+        labelText,
+        inputId,
+        options,
+        stringingKey
+      ) {
+        const fieldDiv = document.createElement("div");
+        fieldDiv.className = "form-field";
+
+        const label = document.createElement("label");
+        label.innerText = labelText;
+        label.htmlFor = inputId;
+
+        // This wrapper is the positioning anchor for the absolute-positioned options list
+        const dropdownWrapper = document.createElement("div");
+        dropdownWrapper.className = "custom-dropdown-container";
+
+        // This hidden select will store the actual value for form submission purposes
+        const hiddenSelect = document.createElement("select");
+        hiddenSelect.id = inputId;
+        hiddenSelect.style.display = "none"; // Hide it from the user
+
+        // The visible part of our dropdown
+        const dropdownDisplay = document.createElement("div");
+        dropdownDisplay.className = "custom-dropdown-display";
+        dropdownDisplay.tabIndex = 0; // Make it focusable
+
+        const displayValue = document.createElement("span");
+        displayValue.className = "custom-dropdown-value";
+        displayValue.innerText = options[0].text; // "Select Sidewall Color"
+        dropdownDisplay.appendChild(displayValue);
+
+        // The list of options
+        const optionsList = document.createElement("ul");
+        optionsList.className = "custom-dropdown-options";
+
+        options.forEach((optionData, index) => {
+          // Create the hidden native option
+          const nativeOption = document.createElement("option");
+          nativeOption.value = optionData.text;
+          nativeOption.id = optionData.id;
+          if (index === 0) {
+            nativeOption.disabled = true;
+            nativeOption.selected = true;
+          }
+          hiddenSelect.appendChild(nativeOption);
+
+          // Create the visible list item
+          const listItem = document.createElement("li");
+          listItem.className = "custom-dropdown-option";
+          listItem.dataset.value = optionData.text;
+          listItem.dataset.id = optionData.id;
+
+          if (optionData.color) {
+            const colorBox = document.createElement("span");
+            colorBox.className = "color-box";
+            colorBox.style.backgroundColor = optionData.color;
+            if (optionData.color === "white") {
+              colorBox.style.border = "1px solid #ccc";
+            }
+            listItem.appendChild(colorBox);
+          }
+
+          const optionText = document.createElement("span");
+          optionText.innerText = optionData.text;
+          listItem.appendChild(optionText);
+
+          // When an option is clicked
+          listItem.addEventListener("click", () => {
+            displayValue.innerText = optionData.text;
+            hiddenSelect.value = optionData.text;
+
+            // Manually trigger a 'change' event on the hidden select for our existing listeners
+            hiddenSelect.dispatchEvent(new Event("change"));
+
+            optionsList.classList.remove("open");
+            dropdownDisplay.classList.remove("open");
+          });
+
+          optionsList.appendChild(listItem);
+        });
+
+        // Toggle dropdown on click
+        dropdownDisplay.addEventListener("click", () => {
+          optionsList.classList.toggle("open");
+          dropdownDisplay.classList.toggle("open");
+        });
+
+        fieldDiv.appendChild(label);
+        // Append the visible parts to the wrapper
+        dropdownWrapper.appendChild(dropdownDisplay);
+        dropdownWrapper.appendChild(optionsList);
+        fieldDiv.appendChild(dropdownWrapper); // Append the wrapper to the field
+        fieldDiv.appendChild(hiddenSelect); // Add the hidden select to the DOM
+        container.appendChild(fieldDiv);
+
+        // Close dropdown if clicking outside
+        document.addEventListener("click", (e) => {
+          if (!fieldDiv.contains(e.target)) {
+            optionsList.classList.remove("open");
+            dropdownDisplay.classList.remove("open");
+          }
+        });
+
+        return hiddenSelect; // Return the hidden select so event listeners can be attached
+      }
+
+      function createStandardField(
         container,
         labelText,
         inputType,
@@ -99,6 +207,37 @@ Ecwid.OnAPILoaded.add(function () {
         fieldDiv.appendChild(label);
         fieldDiv.appendChild(input);
         container.appendChild(fieldDiv);
+        return input;
+      }
+
+      function createFormField(
+        container,
+        labelText,
+        inputType,
+        inputId,
+        options = [],
+        stringingKey
+      ) {
+        // If it's a color dropdown, use the new custom function and then exit.
+        if (options.some((opt) => opt.color)) {
+          return createCustomDropdown(
+            container,
+            labelText,
+            inputId,
+            options,
+            stringingKey
+          );
+        } else {
+          // For all other dropdowns, proceed with the original logic.
+          return createStandardField(
+            container,
+            labelText,
+            inputType,
+            inputId,
+            options,
+            stringingKey
+          );
+        }
       }
 
       // --- Function to create and inject the option buttons ---
