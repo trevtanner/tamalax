@@ -159,6 +159,19 @@ Ecwid.OnAPILoaded.add(function () {
         options = [],
         stringingKey
       ) {
+        // If it's a color dropdown, use the new custom function
+        if (options.some((opt) => opt.color)) {
+          const hiddenSelect = createCustomDropdown(
+            container,
+            labelText,
+            inputId,
+            options,
+            stringingKey
+          );
+          // We don't need to do anything else here, the custom function handles it.
+          return hiddenSelect;
+        }
+
         const fieldDiv = document.createElement("div");
         fieldDiv.className = "form-field";
 
@@ -533,7 +546,7 @@ Ecwid.OnAPILoaded.add(function () {
             "Shooter Color": customStringing.shooterColor,
             "Shooter Setup": customStringing.shooterSetup,
             "Pocket Placement": customStringing.pocketPlacement,
-            "Head": page.name,
+            Head: page.name,
           },
           callback: function (success, product, cart) {
             if (success) {
