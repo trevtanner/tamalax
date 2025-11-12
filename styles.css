@@ -60,18 +60,12 @@ label {
   color: #34495e;
 }
 
-input[type="text"],
-select {
-  padding: 12px 15px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  font-size: 16px;
-  transition: border-color 0.3s, box-shadow 0.3s;
-  -webkit-appearance: none; /* Removes default safari styling */
-  -moz-appearance: none; /* Removes default firefox styling */
+/* Reset appearance for the hidden select inside our custom dropdown */
+.custom-dropdown-container select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
   appearance: none;
 }
-
 input[type="text"]:focus,
 select:focus {
   outline: none;
@@ -132,29 +126,54 @@ select:focus {
 }
 
 /* The visible part of the dropdown, styled to look like a select box */
-.custom-dropdown-display {
-  padding: 12px 15px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  font-size: 16px;
-  background-color: #fff;
-  cursor: pointer;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  transition: border-color 0.3s, box-shadow 0.3s;
+.custom-dropdown-container .custom-dropdown-display {
+  padding: 2px 2px !important;
+  border: 1px solid #ddd !important;
+  border-radius: 8px !important;
+  font-size: 14px !important;
+  background-color: #fff !important;
+  cursor: pointer !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  transition: border-color 0.3s, box-shadow 0.3s !important;
+}
+
+/* --- NEW: Styles for the NATIVE select inside our custom container --- */
+.custom-dropdown-container select {
+  width: 100% !important;
+  padding: 2px 2px !important;
+  border: 1px solid #ddd !important;
+  border-radius: 8px !important;
+  font-size: 14px !important;
+  background-color: #fff !important;
+  cursor: pointer !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  appearance: none !important;
+  /* Use a background image for the arrow to mimic the custom one */
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23888888%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 6px center !important;
+  background-size: 0.7em !important;
 }
 
 /* Add a down-arrow icon */
-.custom-dropdown-display::after {
-  content: "▼";
-  font-size: 0.7em;
-  color: #888;
+.custom-dropdown-container .custom-dropdown-display::after {
+  content: "";
+  width: 0.7em;
+  height: 0.7em;
+  /* Use the same SVG arrow as the native select for consistency */
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23888888%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  margin-right: 5px;
 }
 
 /* Style changes when the dropdown is open or focused */
-.custom-dropdown-display.open,
-.custom-dropdown-display:focus {
+.custom-dropdown-container .custom-dropdown-display.open,
+.custom-dropdown-container .custom-dropdown-display:focus {
   outline: none;
   border-color: #3498db;
   box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
@@ -162,18 +181,17 @@ select:focus {
 
 /* The list of options, hidden by default */
 .custom-dropdown-options {
-  display: none;
-  position: relative;
+  display: none; /* This is toggled to 'block' by JS */
   top: 100%;
   left: 0;
   right: 0;
-  background-color: #fff;
-  border: 1px solid #ddd;
+   background-color: #fff !important;
+  border: 1px solid #000000;
   border-top: none;
-  border-radius: 0 0 8px 8px;
+  /* border-radius: 0 0 8px 8px; */
   list-style: none;
   margin: 0;
-  padding: 0;
+  padding: 4px !important;
   z-index: 1000;
   max-height: 200px;
   overflow-y: auto;
@@ -185,20 +203,26 @@ select:focus {
 }
 
 /* Individual option styling */
-.custom-dropdown-option {
-  padding: 12px 15px;
-  cursor: pointer;
+.custom-dropdown-container .custom-dropdown-option {
+  padding: 2px 2px;
+  cursor: default;
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-.custom-dropdown-option:hover {
+.custom-dropdown-container .custom-dropdown-option.disabled {
+  color: #aaa;
+  cursor: default;
+  background-color: #fff !important; /* Ensure it doesn't get a hover effect */
+}
+
+.custom-dropdown-container .custom-dropdown-option:hover {
   background-color: #f4f4f9;
 }
 
 /* The colored box itself */
-.color-box {
+.custom-dropdown-container .color-box {
   width: 18px;
   height: 18px;
   border-radius: 4px;

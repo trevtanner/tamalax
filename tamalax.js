@@ -94,6 +94,7 @@ Ecwid.OnAPILoaded.add(function () {
             nativeOption.disabled = true;
             nativeOption.selected = true;
           }
+
           hiddenSelect.appendChild(nativeOption);
 
           // Create the visible list item
@@ -101,6 +102,10 @@ Ecwid.OnAPILoaded.add(function () {
           listItem.className = "custom-dropdown-option";
           listItem.dataset.value = optionData.text;
           listItem.dataset.id = optionData.id;
+
+          if (index === 0) {
+            listItem.classList.add("disabled");
+          }
 
           if (optionData.color) {
             const colorBox = document.createElement("span");
@@ -118,6 +123,12 @@ Ecwid.OnAPILoaded.add(function () {
 
           // When an option is clicked
           listItem.addEventListener("click", () => {
+            // If the option is disabled, just close the dropdown and do nothing else.
+            if (listItem.classList.contains("disabled")) {
+              optionsList.classList.remove("open");
+              dropdownDisplay.classList.remove("open");
+              return;
+            }
             displayValue.innerText = optionData.text;
             hiddenSelect.value = optionData.text;
 
@@ -204,8 +215,17 @@ Ecwid.OnAPILoaded.add(function () {
           input.placeholder = "Enter value...";
         }
 
-        fieldDiv.appendChild(label);
-        fieldDiv.appendChild(input);
+        if (inputType === "select") {
+          // Wrap the native select in a container to apply custom styling
+          const selectWrapper = document.createElement("div");
+          selectWrapper.className = "custom-dropdown-container";
+          selectWrapper.appendChild(input);
+          fieldDiv.appendChild(label);
+          fieldDiv.appendChild(selectWrapper);
+        } else {
+          fieldDiv.appendChild(label);
+          fieldDiv.appendChild(input);
+        }
         container.appendChild(fieldDiv);
         return input;
       }
