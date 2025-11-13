@@ -266,6 +266,74 @@ Ecwid.OnAPILoaded.add(function () {
         }
       }
 
+      function createImageRadioButtons(container, labelText, name, options) {
+        const fieldDiv = document.createElement("div");
+        fieldDiv.className = "form-field image-radio-field";
+
+        const label = document.createElement("label");
+        label.innerText = labelText;
+        label.htmlFor = name;
+
+        const fieldset = document.createElement("fieldset");
+        const legend = document.createElement("legend");
+        legend.innerText = labelText;
+
+        const selectionDisplay = document.createElement("span");
+        selectionDisplay.id = `${name}-display`;
+        label.appendChild(selectionDisplay);
+        fieldset.appendChild(legend);
+
+        const optionsWrapper = document.createElement("div");
+        optionsWrapper.className = "image-radio-options-wrapper";
+        optionsWrapper.classList.add(`image-radio-wrapper-${name}`); // Add a unique class
+
+        options.forEach((optionData) => {
+          const wrapper = document.createElement("div");
+          wrapper.className = `image-radio-wrapper`;
+
+          const input = document.createElement("input");
+          input.type = "radio";
+          input.id = `radio-${name}-${optionData.id}`;
+          input.name = name;
+          input.value = optionData.text; // Pass the full text as the value
+
+          const label = document.createElement("label");
+          label.htmlFor = input.id;
+          label.dataset.tooltip = optionData.text;
+
+          const img = document.createElement("img");
+          img.src = optionData.image;
+          img.alt = optionData.text;
+          img.style.width = "130px";
+          img.style.height = "130px";
+
+          const textSpan = document.createElement("span");
+          // textSpan.innerText = optionData.text;
+
+          label.appendChild(img);
+          label.appendChild(textSpan);
+          wrapper.appendChild(input);
+          wrapper.appendChild(label);
+          optionsWrapper.appendChild(wrapper);
+        });
+
+        fieldDiv.appendChild(label);
+        fieldset.appendChild(optionsWrapper);
+        fieldDiv.appendChild(fieldset);
+        container.appendChild(fieldDiv);
+
+        // Add event listener to the wrapper to handle changes
+        optionsWrapper.addEventListener("change", (event) => {
+          if (event.target.type === "radio") {
+            // We can dispatch a custom event if needed, but for now we'll let the main listener handle it.
+            // This is just to show where you'd capture the change.
+          }
+        });
+
+        // Return the wrapper for consistency, though we'll listen differently
+        return optionsWrapper;
+      }
+
       // --- Function to create and inject the option buttons ---
       function createOptionButtons(container) {
         const optionsContainer = document.createElement("div");
@@ -296,9 +364,6 @@ Ecwid.OnAPILoaded.add(function () {
         const sidewallSelect = document.getElementById("custom-sidewall-input");
         const shooterColorSelect = document.getElementById(
           "custom-shooters-input"
-        );
-        const shooterSetupSelect = document.getElementById(
-          "custom-shooter-setup-select"
         );
         const pocketPlacementSelect = document.getElementById(
           "custom-pocket-placement-input"
@@ -362,17 +427,42 @@ Ecwid.OnAPILoaded.add(function () {
           console.log(customStringing); // For testing
         });
 
-        shooterSetupSelect.addEventListener("change", (event) => {
-          customStringing.shooterSetup = event.target.value;
-          updateButtonState();
-          console.log(customStringing); // For testing
+        // Updated listener for the radio button group
+        const shooterSetupContainer = document.querySelector(
+          ".image-radio-wrapper-shooter-setup" // Use the unique class
+        );
+        const shooterSelectionDisplay = document.getElementById(
+          "shooter-setup-display"
+        );
+        shooterSetupContainer.addEventListener("change", (event) => {
+          if (event.target.name === "shooter-setup") {
+            customStringing.shooterSetup = event.target.value;
+            updateButtonState();
+            shooterSelectionDisplay.innerText = ` ${event.target.value}`;
+            console.log(customStringing); // For testing
+          }
         });
 
-        pocketPlacementSelect.addEventListener("change", (event) => {
-          customStringing.pocketPlacement = event.target.value;
-          updateButtonState();
-          console.log(customStringing); // For testing
+        // Updated listener for the radio button group
+        const pocketSetupContainer = document.querySelector(
+          ".image-radio-wrapper-pocket-placement" // Use the unique class
+        );
+        const pocketSelectionDisplay = document.getElementById(
+          "pocket-placement-display"
+        );
+        pocketSetupContainer.addEventListener("change", (event) => {
+          if (event.target.name === "pocket-placement") {
+            customStringing.pocketPlacement = event.target.value;
+            updateButtonState();
+            pocketSelectionDisplay.innerText = ` ${event.target.value}`;
+            console.log(customStringing); // For testing
+          }
         });
+        // pocketPlacementSelect.addEventListener("change", (event) => {
+        //   customStringing.pocketPlacement = event.target.value;
+        //   updateButtonState();
+        //   console.log(customStringing); // For testing
+        // });
 
         commentsInput.addEventListener("input", (event) => {
           customStringing.stringingComments = event.target.value;
@@ -444,33 +534,78 @@ Ecwid.OnAPILoaded.add(function () {
         shooterColorOptions
       );
       const shooterOptions = [
-        { id: "", text: "Select Shooter Setup" },
-        { id: "1s", text: "1 Straight Hockey Lace" },
-        { id: "1s1n", text: "1 Straight Hockey Lace, 1 Nylon" },
-        { id: "2s", text: "2 Straight Hockey Lace" },
-        { id: "2s1n", text: "2 Straight Hockey Lace, 1 Nylon" },
-        { id: "3s", text: "3 Straight Hockey Lace" },
+        {
+          id: "1s",
+          text: "1 Straight Hockey Lace",
+          image:
+            "https://d2j6dbq0eux0bg.cloudfront.net/images/111661765/5375146099.png",
+        },
+        {
+          id: "1s1n",
+          text: "1 Straight Hockey Lace, 1 Nylon",
+          image:
+            "https://d2j6dbq0eux0bg.cloudfront.net/images/111661765/5375146105.png",
+        },
+        {
+          id: "2s",
+          text: "2 Straight Hockey Lace",
+          image:
+            "https://d2j6dbq0eux0bg.cloudfront.net/images/111661765/5375146111.png",
+        },
+        {
+          id: "2s1n",
+          text: "2 Straight Hockey Lace, 1 Nylon",
+          image:
+            "https://d2j6dbq0eux0bg.cloudfront.net/images/111661765/5375151078.png",
+        },
+        {
+          id: "3s",
+          text: "3 Straight Hockey Lace",
+          image:
+            "https://d2j6dbq0eux0bg.cloudfront.net/images/111661765/5375151082.png",
+        },
       ];
-      createFormField(
+      // Call the new function instead of createFormField
+      createImageRadioButtons(
         customContainer,
         "* Shooter Setup:",
-        "select",
-        "custom-shooter-setup-select",
+        "shooter-setup", // This is the 'name' for the radio group
         shooterOptions
       );
       const pocketOptions = [
-        { id: "", text: "Select Pocket Placement" },
-        { id: "high", text: "High" },
-        { id: "mid", text: "Mid" },
-        { id: "low", text: "Low" },
+        {
+          id: "high",
+          text: "High",
+          image:
+            "https://d2j6dbq0eux0bg.cloudfront.net/images/111661765/5375215826.png",
+        },
+        {
+          id: "mid",
+          text: "Mid",
+          image:
+            "https://d2j6dbq0eux0bg.cloudfront.net/images/111661765/5375202204.png",
+        },
+        {
+          id: "low",
+          text: "Low",
+          image:
+            "https://d2j6dbq0eux0bg.cloudfront.net/images/111661765/5375209645.png",
+        },
       ];
-      createFormField(
+
+      createImageRadioButtons(
         customContainer,
         "* Pocket Placement:",
-        "select",
-        "custom-pocket-placement-input",
+        "pocket-placement", // This is the 'name' for the radio group
         pocketOptions
       );
+      // createFormField(
+      //   customContainer,
+      //   "* Pocket Placement:",
+      //   "select",
+      //   "custom-pocket-placement-input",
+      //   pocketOptions
+      // );
 
       createFormField(
         customContainer,
@@ -615,7 +750,7 @@ Ecwid.OnAPILoaded.add(function () {
             "Shooter Color": customStringing.shooterColor,
             "Shooter Setup": customStringing.shooterSetup,
             "Pocket Placement": customStringing.pocketPlacement,
-            "Head": page.name,
+            Head: page.name,
             "Stringing Comments": customStringing.stringingComments,
           },
           callback: function (success, product, cart) {

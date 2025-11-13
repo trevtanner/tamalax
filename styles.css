@@ -186,7 +186,7 @@ select:focus {
   top: 100%;
   left: 0;
   right: 0;
-   background-color: #fff !important;
+  background-color: #fff !important;
   border: 1px solid #000000;
   border-top: none;
   /* border-radius: 0 0 8px 8px; */
@@ -228,4 +228,67 @@ select:focus {
   height: 18px;
   border-radius: 4px;
   flex-shrink: 0; /* Prevents the box from shrinking */
+}
+
+/* --- NEW: Image Radio Button Styles --- */
+
+.image-radio-field fieldset {
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+.image-radio-field legend {
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #34495e;
+  padding: 0;
+}
+
+.image-radio-options-wrapper {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 16px;
+}
+
+.image-radio-wrapper input[type="radio"] {
+  /* Hide the actual radio button */
+  opacity: 0;
+  position: fixed;
+  width: 0;
+}
+
+.image-radio-wrapper label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 10px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  font-size: 11px;
+}
+
+.image-radio-wrapper label img {
+  max-width: 100%;
+  margin-bottom: 8px;
+  border-radius: 4px;
+}
+
+.image-radio-wrapper input[type="radio"]:checked + label {
+  border-color: #3498db;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+}
+
+.image-radio-wrapper input[type="radio"]:focus + label {
+  border-color: #3498db;
+}
+
+/* Style for the text that shows the current selection */
+#shooter-selection-display {
+  font-weight: 400; /* Make it less prominent than the label */
+  color: #555;
+  font-size: 14x;
 }
