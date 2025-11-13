@@ -8,7 +8,7 @@
   display: flex;
   justify-content: center;
   margin-bottom: 20px !important;
-  border: 2px solid #000000;
+  border: 1px solid #000000 !important;
   border-radius: 10px;
   overflow: hidden;
 }
@@ -61,7 +61,8 @@ label {
 }
 
 /* Reset appearance for the hidden select inside our custom dropdown */
-.custom-dropdown-container select {
+.custom-dropdown-container select,
+textarea {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;

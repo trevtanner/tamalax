@@ -45,6 +45,7 @@ Ecwid.OnAPILoaded.add(function () {
         shooterColor: "",
         shooterSetup: "",
         pocketPlacement: "",
+        stringingComments: "",
         totalPrice: currentPriceNumber + 29.99,
       };
 
@@ -208,6 +209,11 @@ Ecwid.OnAPILoaded.add(function () {
           });
 
           input.firstChild.setAttribute("disabled", true);
+        } else if (inputType === "textarea") {
+          input = document.createElement("textarea");
+          input.id = inputId;
+          input.rows = 4; // Set a default height
+          input.placeholder = "Any special instructions?";
         } else {
           input = document.createElement("input");
           input.type = inputType;
@@ -297,6 +303,9 @@ Ecwid.OnAPILoaded.add(function () {
         const pocketPlacementSelect = document.getElementById(
           "custom-pocket-placement-input"
         );
+        const commentsInput = document.getElementById(
+          "custom-stringing-comments-input"
+        );
 
         const newBuyButton = document.getElementById("new-buy-btn");
 
@@ -364,6 +373,12 @@ Ecwid.OnAPILoaded.add(function () {
           updateButtonState();
           console.log(customStringing); // For testing
         });
+
+        commentsInput.addEventListener("input", (event) => {
+          customStringing.stringingComments = event.target.value;
+          // No need to update button state here, comments are optional
+          console.log(customStringing); // For testing
+        });
       }
 
       // --- Create the custom form container and its fields ---
@@ -385,7 +400,7 @@ Ecwid.OnAPILoaded.add(function () {
       ];
       createFormField(
         customContainer,
-        "Mesh:",
+        "* Mesh:",
         "select",
         "custom-mesh-input",
         meshOptions
@@ -404,7 +419,7 @@ Ecwid.OnAPILoaded.add(function () {
       ];
       createFormField(
         customContainer,
-        "Sidewall Color:",
+        "* Sidewall Color:",
         "select",
         "custom-sidewall-input",
         sidewallColorOptions
@@ -423,7 +438,7 @@ Ecwid.OnAPILoaded.add(function () {
       ];
       createFormField(
         customContainer,
-        "Shooter Color:",
+        "* Shooter Color:",
         "select",
         "custom-shooters-input",
         shooterColorOptions
@@ -438,7 +453,7 @@ Ecwid.OnAPILoaded.add(function () {
       ];
       createFormField(
         customContainer,
-        "Shooter Setup:",
+        "* Shooter Setup:",
         "select",
         "custom-shooter-setup-select",
         shooterOptions
@@ -451,10 +466,17 @@ Ecwid.OnAPILoaded.add(function () {
       ];
       createFormField(
         customContainer,
-        "Pocket Placement:",
+        "* Pocket Placement:",
         "select",
         "custom-pocket-placement-input",
         pocketOptions
+      );
+
+      createFormField(
+        customContainer,
+        "Stringing Comments:",
+        "textarea",
+        "custom-stringing-comments-input"
       );
 
       // Hide the form by default
@@ -593,7 +615,8 @@ Ecwid.OnAPILoaded.add(function () {
             "Shooter Color": customStringing.shooterColor,
             "Shooter Setup": customStringing.shooterSetup,
             "Pocket Placement": customStringing.pocketPlacement,
-            Head: page.name,
+            "Head": page.name,
+            "Stringing Comments": customStringing.stringingComments,
           },
           callback: function (success, product, cart) {
             if (success) {
