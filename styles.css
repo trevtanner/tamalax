@@ -292,3 +292,8 @@ select:focus {
   color: #555;
   font-size: 14x;
 }
+
+/* Style for the text that shows the current selection */
+#custom-stringing-comments-input {
+padding: 0px 5px 0px 5px
+}

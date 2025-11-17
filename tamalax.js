@@ -536,33 +536,39 @@ Ecwid.OnAPILoaded.add(function () {
       const shooterOptions = [
         {
           id: "1s",
-          text: "1 Straight Hockey Lace",
+          text: "1 Straight Hockey",
           image:
             "https://d2j6dbq0eux0bg.cloudfront.net/images/111661765/5375146099.png",
         },
         {
           id: "1s1n",
-          text: "1 Straight Hockey Lace, 1 Nylon",
+          text: "1 Nylon, 1 Straight Hockey",
           image:
             "https://d2j6dbq0eux0bg.cloudfront.net/images/111661765/5375146105.png",
         },
         {
           id: "2s",
-          text: "2 Straight Hockey Lace",
+          text: "2 Straight Hockey",
           image:
             "https://d2j6dbq0eux0bg.cloudfront.net/images/111661765/5375146111.png",
         },
         {
           id: "2s1n",
-          text: "2 Straight Hockey Lace, 1 Nylon",
+          text: "1 Nylon, 2 Straight Hockey",
           image:
-            "https://d2j6dbq0eux0bg.cloudfront.net/images/111661765/5375151078.png",
+            "https://d2j6dbq0eux0bg.cloudfront.net/images/111661765/5384964103.png",
         },
         {
           id: "3s",
-          text: "3 Straight Hockey Lace",
+          text: "3 Straight Hockey",
           image:
             "https://d2j6dbq0eux0bg.cloudfront.net/images/111661765/5375151082.png",
+        },
+        {
+          id: "other",
+          text: "Other (Specify in comments)",
+          image:
+            "https://d2j6dbq0eux0bg.cloudfront.net/images/111661765/5384964055.png",
         },
       ];
       // Call the new function instead of createFormField
