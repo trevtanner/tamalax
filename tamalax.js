@@ -376,13 +376,24 @@ Ecwid.OnAPILoaded.add(function () {
 
         // New function to check if all selections are made
         function checkFormValidity() {
-          return (
-            customStringing.mesh !== "" &&
-            customStringing.sidewallColor !== "" &&
-            customStringing.shooterColor !== "" &&
-            customStringing.shooterSetup !== "" &&
-            customStringing.pocketPlacement !== ""
-          );
+          if (customStringing.shooterSetup === "Other (Specify in comments)") {
+            return (
+              customStringing.mesh !== "" &&
+              customStringing.sidewallColor !== "" &&
+              customStringing.shooterColor !== "" &&
+              customStringing.shooterSetup !== "" &&
+              customStringing.pocketPlacement !== "" &&
+              customStringing.stringingComments !== ""
+            );
+          } else {
+            return (
+              customStringing.mesh !== "" &&
+              customStringing.sidewallColor !== "" &&
+              customStringing.shooterColor !== "" &&
+              customStringing.shooterSetup !== "" &&
+              customStringing.pocketPlacement !== ""
+            );
+          }
         }
         function updateButtonState() {
           if (checkFormValidity()) {
@@ -466,7 +477,7 @@ Ecwid.OnAPILoaded.add(function () {
 
         commentsInput.addEventListener("input", (event) => {
           customStringing.stringingComments = event.target.value;
-          // No need to update button state here, comments are optional
+          updateButtonState();
           console.log(customStringing); // For testing
         });
       }
@@ -500,12 +511,18 @@ Ecwid.OnAPILoaded.add(function () {
         { id: "wht", text: "White", color: "white" },
         { id: "blk", text: "Black", color: "black" },
         { id: "red", text: "Red", color: "red" },
-        { id: "blu", text: "Blue", color: "blue" },
-        { id: "grn", text: "Green", color: "green" },
-        { id: "yel", text: "Yellow", color: "yellow" },
-        { id: "org", text: "Orange", color: "orange" },
+        { id: "yel", text: "Yellow", color: "#ffe100" },
+        { id: "org", text: "Orange", color: "#f4562b" },
+        { id: "royblu", text: "Royal Blue", color: "#1965d7" },
+        { id: "nvyblu", text: "Navy Blue", color: "#171d44" },
+        { id: "carblu", text: "Carolina Blue", color: "#8edbff" },
+        { id: "klygrn", text: "Kelly Green", color: "#4CBB17" },
+        { id: "frstgrn", text: "Forest Green", color: "#228B22" },
         { id: "pur", text: "Purple", color: "purple" },
-        { id: "pin", text: "Pink", color: "pink" },
+        { id: "npink", text: "Neon Pink", color: "#ff6cf5" },
+        { id: "nyel", text: "Neon Yellow", color: "#eaff00" },
+        { id: "norg", text: "Neon Orange", color: "#ff9900" },
+        { id: "ngrn", text: "Neon Green", color: "#11ff1d" },
       ];
       createFormField(
         customContainer,
@@ -515,16 +532,22 @@ Ecwid.OnAPILoaded.add(function () {
         sidewallColorOptions
       );
       const shooterColorOptions = [
-        { id: "", text: "Select Shooter Color" },
+        { id: "", text: "Select Sidewall Color" },
         { id: "wht", text: "White", color: "white" },
         { id: "blk", text: "Black", color: "black" },
         { id: "red", text: "Red", color: "red" },
-        { id: "blu", text: "Blue", color: "blue" },
-        { id: "grn", text: "Green", color: "green" },
-        { id: "yel", text: "Yellow", color: "yellow" },
-        { id: "org", text: "Orange", color: "orange" },
+        { id: "yel", text: "Yellow", color: "#ffe100" },
+        { id: "org", text: "Orange", color: "#f4562b" },
+        { id: "royblu", text: "Royal Blue", color: "#1965d7" },
+        { id: "nvyblu", text: "Navy Blue", color: "#171d44" },
+        { id: "carblu", text: "Carolina Blue", color: "#8edbff" },
+        { id: "klygrn", text: "Kelly Green", color: "#4CBB17" },
+        { id: "frstgrn", text: "Forest Green", color: "#228B22" },
         { id: "pur", text: "Purple", color: "purple" },
-        { id: "pin", text: "Pink", color: "pink" },
+        { id: "npink", text: "Neon Pink", color: "#ff6cf5" },
+        { id: "nyel", text: "Neon Yellow", color: "#eaff00" },
+        { id: "norg", text: "Neon Orange", color: "#ff9900" },
+        { id: "ngrn", text: "Neon Green", color: "#11ff1d" },
       ];
       createFormField(
         customContainer,
@@ -571,11 +594,11 @@ Ecwid.OnAPILoaded.add(function () {
             "https://d2j6dbq0eux0bg.cloudfront.net/images/111661765/5384964055.png",
         },
       ];
-      // Call the new function instead of createFormField
+
       createImageRadioButtons(
         customContainer,
         "* Shooter Setup:",
-        "shooter-setup", // This is the 'name' for the radio group
+        "shooter-setup",
         shooterOptions
       );
       const pocketOptions = [
@@ -602,16 +625,9 @@ Ecwid.OnAPILoaded.add(function () {
       createImageRadioButtons(
         customContainer,
         "* Pocket Placement:",
-        "pocket-placement", // This is the 'name' for the radio group
+        "pocket-placement",
         pocketOptions
       );
-      // createFormField(
-      //   customContainer,
-      //   "* Pocket Placement:",
-      //   "select",
-      //   "custom-pocket-placement-input",
-      //   pocketOptions
-      // );
 
       createFormField(
         customContainer,
