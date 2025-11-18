@@ -402,6 +402,7 @@ Ecwid.OnAPILoaded.add(function () {
             newBuyButton.textContent = "Add to Bag";
           } else {
             newBuyButton.disabled = true;
+            newBuyButton.className = "new-buy-button disabled";
             newBuyButton.textContent = "Please make all selections";
           }
         }
