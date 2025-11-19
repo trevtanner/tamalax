@@ -295,5 +295,15 @@ select:focus {
 
 /* Style for the text that shows the current selection */
 #custom-stringing-comments-input {
-padding: 0px 5px 0px 5px
+  padding: 0px 5px 0px 5px;
+}
+
+.image-radio-wrapper-stringking-mesh-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 10px;
+}
+
+.image-radio-wrapper-stringking-mesh-options label {
+  font-size: 14px;
 }

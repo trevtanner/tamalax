@@ -268,7 +268,8 @@ Ecwid.OnAPILoaded.add(function () {
 
       function createImageRadioButtons(container, labelText, name, options) {
         const fieldDiv = document.createElement("div");
-        fieldDiv.className = "form-field image-radio-field";
+        fieldDiv.id = name;
+        fieldDiv.className = `form-field image-radio-field ${name}`;
 
         const label = document.createElement("label");
         label.innerText = labelText;
@@ -304,13 +305,84 @@ Ecwid.OnAPILoaded.add(function () {
           const img = document.createElement("img");
           img.src = optionData.image;
           img.alt = optionData.text;
-          img.style.width = "130px";
-          img.style.height = "130px";
+          img.style.width = "120px";
+          img.style.height = "120px";
 
           const textSpan = document.createElement("span");
           // textSpan.innerText = optionData.text;
 
           label.appendChild(img);
+          label.appendChild(textSpan);
+          wrapper.appendChild(input);
+          wrapper.appendChild(label);
+          optionsWrapper.appendChild(wrapper);
+        });
+
+        fieldDiv.appendChild(label);
+        fieldset.appendChild(optionsWrapper);
+        fieldDiv.appendChild(fieldset);
+        container.appendChild(fieldDiv);
+
+        // Add event listener to the wrapper to handle changes
+        optionsWrapper.addEventListener("change", (event) => {
+          if (event.target.type === "radio") {
+            // We can dispatch a custom event if needed, but for now we'll let the main listener handle it.
+            // This is just to show where you'd capture the change.
+          }
+        });
+
+        // Return the wrapper for consistency, though we'll listen differently
+        return optionsWrapper;
+      }
+
+      function createMeshImageRadioButtons(
+        container,
+        labelText,
+        name,
+        options
+      ) {
+        const fieldDiv = document.createElement("div");
+        fieldDiv.id = name;
+        fieldDiv.className = `form-field image-radio-field ${name}`;
+
+        const label = document.createElement("label");
+        label.innerText = labelText;
+        label.htmlFor = name;
+
+        const fieldset = document.createElement("fieldset");
+        const legend = document.createElement("legend");
+        legend.innerText = labelText;
+
+        const selectionDisplay = document.createElement("span");
+        selectionDisplay.id = `${name}-display`;
+        label.appendChild(selectionDisplay);
+        fieldset.appendChild(legend);
+
+        const optionsWrapper = document.createElement("div");
+        optionsWrapper.className = "image-radio-options-wrapper";
+        optionsWrapper.classList.add(`image-radio-wrapper-${name}`); // Add a unique class
+
+        options.forEach((optionData) => {
+          const wrapper = document.createElement("div");
+          wrapper.className = `image-radio-wrapper`;
+
+          const input = document.createElement("input");
+          input.type = "radio";
+          input.id = `radio-${name}-${optionData.id}`;
+          input.name = name;
+          input.value = optionData.text; // Pass the full text as the value
+          if (optionData.price !== undefined) {
+            input.dataset.price = optionData.price;
+          }
+
+          const label = document.createElement("label");
+          label.htmlFor = input.id;
+          label.dataset.tooltip = optionData.text;
+
+          const textSpan = document.createElement("span");
+          textSpan.innerText = optionData.title;
+          textSpan.dataset.tooltip = optionData.text;
+
           label.appendChild(textSpan);
           wrapper.appendChild(input);
           wrapper.appendChild(label);
@@ -365,9 +437,6 @@ Ecwid.OnAPILoaded.add(function () {
         const shooterColorSelect = document.getElementById(
           "custom-shooters-input"
         );
-        const pocketPlacementSelect = document.getElementById(
-          "custom-pocket-placement-input"
-        );
         const commentsInput = document.getElementById(
           "custom-stringing-comments-input"
         );
@@ -408,23 +477,104 @@ Ecwid.OnAPILoaded.add(function () {
         }
 
         // Add a 'change' event listener to each select element
-        meshSelect.addEventListener("change", (event) => {
-          customStringing.mesh = event.target.value;
-          const selectedOption = event.target.selectedOptions[0];
-          customStringing.meshProductId = selectedOption.id;
-          // Get the price from the data-price attribute, converted to a number
-          const meshPrice = parseFloat(selectedOption.dataset.price);
-          customStringing.totalPrice = currentPriceNumber + 29.99 + meshPrice;
-          // Update the content attribute on the div
-          productPriceElement.setAttribute(
-            "content",
-            customStringing.totalPrice.toFixed(2)
-          );
+        // meshSelect.addEventListener("change", (event) => {
+        //   customStringing.mesh = event.target.value;
+        //   const selectedOption = event.target.selectedOptions[0];
+        //   customStringing.meshProductId = selectedOption.id;
+        //   // Get the price from the data-price attribute, converted to a number
+        //   const meshPrice = parseFloat(selectedOption.dataset.price);
+        //   customStringing.totalPrice = currentPriceNumber + 29.99 + meshPrice;
+        //   // Update the content attribute on the div
+        //   productPriceElement.setAttribute(
+        //     "content",
+        //     customStringing.totalPrice.toFixed(2)
+        //   );
 
-          // Update the text content of the span
-          priceSpan.textContent = `$${customStringing.totalPrice.toFixed(2)}`;
-          updateButtonState();
-          console.log(customStringing); // For testing
+        //   // Update the text content of the span
+        //   priceSpan.textContent = `$${customStringing.totalPrice.toFixed(2)}`;
+        //   updateButtonState();
+        //   console.log(customStringing); // For testing
+        // });
+
+        const meshSelectContainer = document.querySelector(
+          ".image-radio-wrapper-mesh-brand" // Use the unique class
+        );
+        const meshSelectDisplay = document.getElementById("mesh-brand");
+        meshSelectContainer.addEventListener("change", (event) => {
+          const meshBrand = event.target.value;
+          const stringKingDiv = document.getElementById(
+            "stringking-mesh-options"
+          );
+          const ecdDiv = document.getElementById("ecd-mesh-options");
+          const meshBrandDisplay =
+            document.getElementById("mesh-brand-display");
+          console.log(meshBrand);
+          if (meshBrand === "StringKing") {
+            if (ecdDiv) {
+              ecdDiv.remove();
+            }
+            meshBrandDisplay.innerText = ` ${event.target.value}`;
+            createMeshImageRadioButtons(
+              meshSelectDisplay,
+              "* Choose a Mesh:",
+              "stringking-mesh-options",
+              stringKingMeshOptions
+            );
+            // Re-initialize tooltips for the newly created elements
+            const newMeshOptionsContainer = document.querySelector(
+              ".image-radio-wrapper-stringking-mesh-options"
+            );
+            if (newMeshOptionsContainer) {
+              initializeTooltips(newMeshOptionsContainer);
+            }
+            newMeshOptionsContainer.addEventListener("change", (event) => {
+              const stringkingDisplay = document.getElementById(
+                "stringking-mesh-options-display"
+              );
+              stringkingDisplay.innerText = ` ${event.target.value}`;
+              customStringing.mesh = event.target.value;
+
+              // Get the price from the data-price attribute, converted to a number
+              const meshPrice = parseFloat(event.target.dataset.price);
+              customStringing.totalPrice =
+                currentPriceNumber + 29.99 + meshPrice;
+              // Update the content attribute on the div
+              productPriceElement.setAttribute(
+                "content",
+                customStringing.totalPrice.toFixed(2)
+              );
+              // Update the text content of the span
+              priceSpan.textContent = `$${customStringing.totalPrice.toFixed(
+                2
+              )}`;
+              updateButtonState();
+              console.log(customStringing);
+            });
+          } else if (meshBrand === "ECD") {
+            if (stringKingDiv) {
+              stringKingDiv.remove();
+            }
+            meshBrandDisplay.innerText = ` ${event.target.value}`;
+            updateButtonState();
+            console.log(customStringing);
+          }
+
+          // customStringing.mesh = event.target.value;
+          // const selectedOption = event.target.selectedOptions[0];
+          // customStringing.meshProductId = selectedOption.id;
+          // // Get the price from the data-price attribute, converted to a number
+          // const meshPrice = parseFloat(selectedOption.dataset.price);
+          // customStringing.totalPrice = currentPriceNumber + 29.99 + meshPrice;
+          // // Update the content attribute on the div
+          // productPriceElement.setAttribute(
+          //   "content",
+          //   customStringing.totalPrice.toFixed(2)
+          // );
+
+          // // Update the text content of the span
+          // priceSpan.textContent = `$${customStringing.totalPrice.toFixed(2)}`;
+          // updateButtonState();
+          // console.log(customStringing); // For testing
         });
 
         sidewallSelect.addEventListener("change", (event) => {
@@ -491,22 +641,119 @@ Ecwid.OnAPILoaded.add(function () {
       customContainer.className = "my-custom-field-container";
 
       createOptionButtons(buttonContainer);
+
+      // const meshOptions = [
+      //   { text: "Select Mesh", id: "" },
+      //   { text: "StringKing White 5x (+29.99)", id: 1, price: 29.99 },
+      //   { text: "StringKing White 5s (+29.99)", id: 2, price: 29.99 },
+      //   { text: "StringKing Black 5x (+29.99)", id: 3, price: 29.99 },
+      //   { text: "StringKing Black 5s (+29.99)", id: 4, price: 29.99 },
+      //   { text: "ECD HERO 4.0 White (+24.99)", id: 5, price: 24.99 },
+      //   { text: "ECD HERO 4.0 Black (+24.99)", id: 6, price: 24.99 },
+      // ];
+      // createFormField(
+      //   customContainer,
+      //   "* Mesh:",
+      //   "select",
+      //   "custom-mesh-input",
+      //   meshOptions
+      // );
+
       const meshOptions = [
-        { text: "Select Mesh", id: "" },
-        { text: "StringKing White 5x (+29.99)", id: 1, price: 29.99 },
-        { text: "StringKing White 5s (+29.99)", id: 2, price: 29.99 },
-        { text: "StringKing Black 5x (+29.99)", id: 3, price: 29.99 },
-        { text: "StringKing Black 5s (+29.99)", id: 4, price: 29.99 },
-        { text: "ECD HERO 4.0 White (+24.99)", id: 5, price: 24.99 },
-        { text: "ECD HERO 4.0 Black (+24.99)", id: 6, price: 24.99 },
+        {
+          id: "stringking",
+          text: "StringKing",
+          image:
+            "https://d2j6dbq0eux0bg.cloudfront.net/images/111661765/5388042419.png",
+          price: 29.99,
+        },
+        {
+          id: "ecd",
+          text: "ECD",
+          image:
+            "https://d2j6dbq0eux0bg.cloudfront.net/images/111661765/5388042425.png",
+          price: 29.99,
+        },
       ];
-      createFormField(
+
+      createImageRadioButtons(
         customContainer,
-        "* Mesh:",
-        "select",
-        "custom-mesh-input",
+        "* Mesh Brand:",
+        "mesh-brand",
         meshOptions
       );
+
+      const stringKingMeshOptions = [
+        {
+          id: "5xwht",
+          text: "StringKing White 5x (+29.99)",
+          title: "5x White",
+          price: 29.99,
+        },
+        {
+          id: "5xblk",
+          text: "StringKing Black 5x (+29.99)",
+          title: "5x Black",
+          price: 29.99,
+        },
+        {
+          id: "5swht",
+          text: "StringKing White 5s (+29.99)",
+          title: "5s White",
+          price: 29.99,
+        },
+        {
+          id: "5sblk",
+          text: "StringKing Black 5s (+29.99)",
+          title: "5s Black",
+          price: 29.99,
+        },
+        {
+          id: "4xwht",
+          text: "StringKing White 4x (+24.99)",
+          title: "4x White",
+          price: 24.99,
+        },
+        {
+          id: "4xblk",
+          text: "StringKing Black 4x (+24.99)",
+          title: "4x Black",
+          price: 24.99,
+        },
+        {
+          id: "4swht",
+          text: "StringKing White 4s (+24.99)",
+          title: "4s White",
+          price: 24.99,
+        },
+        {
+          id: "4sblk",
+          text: "StringKing Black 4s (+24.99)",
+          title: "4s Black",
+          price: 24.99,
+        },
+        {
+          id: "3xwht",
+          text: "StringKing White 3x (+19.99)",
+          price: 19.99,
+        },
+        {
+          id: "3xblk",
+          text: "StringKing Black 3x (+19.99)",
+          price: 19.99,
+        },
+        {
+          id: "3swht",
+          text: "StringKing White 3s (+19.99)",
+          price: 19.99,
+        },
+        {
+          id: "3sblk",
+          text: "StringKing Black 3s (+19.99)",
+          price: 19.99,
+        },
+      ];
+
       const sidewallColorOptions = [
         { id: "", text: "Select Sidewall Color" },
         { id: "wht", text: "White", color: "white" },
@@ -532,6 +779,7 @@ Ecwid.OnAPILoaded.add(function () {
         "custom-sidewall-input",
         sidewallColorOptions
       );
+
       const shooterColorOptions = [
         { id: "", text: "Select Sidewall Color" },
         { id: "wht", text: "White", color: "white" },
@@ -557,6 +805,7 @@ Ecwid.OnAPILoaded.add(function () {
         "custom-shooters-input",
         shooterColorOptions
       );
+
       const shooterOptions = [
         {
           id: "1s",
@@ -595,13 +844,13 @@ Ecwid.OnAPILoaded.add(function () {
             "https://d2j6dbq0eux0bg.cloudfront.net/images/111661765/5384964055.png",
         },
       ];
-
       createImageRadioButtons(
         customContainer,
         "* Shooter Setup:",
         "shooter-setup",
         shooterOptions
       );
+
       const pocketOptions = [
         {
           id: "high",
@@ -721,33 +970,38 @@ Ecwid.OnAPILoaded.add(function () {
         Ecwid.refreshConfig && Ecwid.refreshConfig();
       });
 
-      //for hover tooltips
-      const triggers = document.querySelectorAll("[data-tooltip]");
+      // --- Function to initialize tooltips for elements within a given container ---
+      function initializeTooltips(container) {
+        const triggers = container.querySelectorAll("[data-tooltip]");
 
-      triggers.forEach((trigger) => {
-        const tooltip = document.createElement("div");
-        tooltip.classList.add("tooltip");
-        tooltip.textContent = trigger.dataset.tooltip;
-        document.body.appendChild(tooltip); // Or append to the trigger itself
+        triggers.forEach((trigger) => {
+          const tooltip = document.createElement("div");
+          tooltip.classList.add("tooltip");
+          tooltip.textContent = trigger.dataset.tooltip;
+          document.body.appendChild(tooltip);
 
-        trigger.addEventListener("mouseenter", () => {
-          const rect = trigger.getBoundingClientRect();
-          tooltip.style.left = `${
-            rect.left +
-            window.scrollX +
-            rect.width / 2 -
-            tooltip.offsetWidth / 2
-          }px`;
-          tooltip.style.top = `${
-            rect.top + window.scrollY + rect.height + 5
-          }px`; // 5px offset below trigger
-          tooltip.classList.add("active");
+          trigger.addEventListener("mouseenter", () => {
+            const rect = trigger.getBoundingClientRect();
+            tooltip.style.left = `${
+              rect.left +
+              window.scrollX +
+              rect.width / 2 -
+              tooltip.offsetWidth / 2
+            }px`;
+            tooltip.style.top = `${
+              rect.top + window.scrollY - tooltip.offsetHeight - 5
+            }px`; // Position above the element
+            tooltip.classList.add("active");
+          });
+
+          trigger.addEventListener("mouseleave", () => {
+            tooltip.classList.remove("active");
+          });
         });
+      }
 
-        trigger.addEventListener("mouseleave", () => {
-          tooltip.classList.remove("active");
-        });
-      });
+      // Initialize tooltips for all elements present on page load
+      initializeTooltips(document.body);
 
       //Set stringing items to cart and add comments(Stringing Selections)
 
