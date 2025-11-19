@@ -735,21 +735,25 @@ Ecwid.OnAPILoaded.add(function () {
         {
           id: "3xwht",
           text: "StringKing White 3x (+19.99)",
+          title: "3x White",
           price: 19.99,
         },
         {
           id: "3xblk",
           text: "StringKing Black 3x (+19.99)",
+          title: "3x Black",
           price: 19.99,
         },
         {
           id: "3swht",
           text: "StringKing White 3s (+19.99)",
+          title: "3s White",
           price: 19.99,
         },
         {
           id: "3sblk",
           text: "StringKing Black 3s (+19.99)",
+          title: "3s Black",
           price: 19.99,
         },
       ];
